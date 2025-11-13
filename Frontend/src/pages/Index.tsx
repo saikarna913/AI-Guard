@@ -77,7 +77,6 @@ const Index = () => {
                 <Select value={model} onValueChange={setModel}>
                   <SelectTrigger id="model" className="w-full">
                     <SelectValue placeholder="Choose a model" />
-                    <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Llama-3.2-1B">GPT (OpenAI)</SelectItem>
@@ -91,7 +90,6 @@ const Index = () => {
                 <Select value={language} onValueChange={setLanguage}>
                   <SelectTrigger id="language" className="w-full">
                     <SelectValue placeholder="Choose a language" />
-                    <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="bengali">Bengali</SelectItem>
