@@ -4,6 +4,9 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
+  // Use a repo-base when deploying to GitHub Pages project site
+  // e.g. https://<username>.github.io/AI-Guard/ -> base should be '/AI-Guard/'
+  base: '/AI-Guard/',
   server: {
     host: "::",
     port: 8080,

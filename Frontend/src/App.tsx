@@ -18,7 +18,10 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+    {/* Use Vite's BASE_URL so the router works correctly when served from a subpath
+      (e.g. GitHub Pages project site at /AI-Guard/). import.meta.env.BASE_URL
+      is set from `base` in vite.config.ts. */}
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/usage" element={<Usage />} />
