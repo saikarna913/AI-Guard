@@ -37,7 +37,7 @@ const Team = () => {
       name: "Karna Pardheev Sai",
       college: "Indian Institute of Technology Gandhinagar",
       year: "Student",
-      course: "Computer Science & Engineering",
+      course: "Dual Major in Computer Science & Chemical Engineering",
       image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Karna",
     },
   ];

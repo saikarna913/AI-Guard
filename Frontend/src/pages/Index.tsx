@@ -60,10 +60,10 @@ const Index = () => {
               <Shield className="w-16 h-16 text-primary" />
             </div>
             <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              Intelligent Text Analyzer
+              AI-Guard(Text Analyzer)
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Analyze any text for content safety and categorization using advanced AI models. 
+              Analyze any text for content safety and categorization using our fine tuned State-of-the-art AI model. 
               Choose your preferred model and language for accurate results.
             </p>
           </div>
@@ -80,11 +80,8 @@ const Index = () => {
                     <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="gpt">GPT (OpenAI)</SelectItem>
-                    <SelectItem value="bert">BERT (Google)</SelectItem>
+                    <SelectItem value="Llama-3.2-1B">GPT (OpenAI)</SelectItem>
                     <SelectItem value="llama">LLaMA (Meta)</SelectItem>
-                    <SelectItem value="gemini">Gemini (Google)</SelectItem>
-                    <SelectItem value="claude">Claude (Anthropic)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -97,13 +94,11 @@ const Index = () => {
                     <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="english">English</SelectItem>
+                    <SelectItem value="bengali">Bengali</SelectItem>
                     <SelectItem value="hindi">Hindi</SelectItem>
-                    <SelectItem value="french">French</SelectItem>
-                    <SelectItem value="spanish">Spanish</SelectItem>
-                    <SelectItem value="german">German</SelectItem>
-                    <SelectItem value="chinese">Chinese</SelectItem>
-                    <SelectItem value="japanese">Japanese</SelectItem>
+                    <SelectItem value="odia">Odia</SelectItem>
+                    <SelectItem value="malayalam">Malayalam</SelectItem>
+                    <SelectItem value="kannada">Kannada</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
