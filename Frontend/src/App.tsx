@@ -10,6 +10,8 @@ import Team from "./pages/Team";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import Datasets from "./pages/Datasets";
+import Experiments from "./pages/Experiments";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/usage" element={<Usage />} />
           <Route path="/api" element={<API />} />
+          <Route path="/datasets" element={<Datasets />} />
+          <Route path="/experiments" element={<Experiments />} />
           <Route path="/team" element={<Team />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
