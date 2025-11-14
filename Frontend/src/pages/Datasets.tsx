@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
-import { ArrowRight, Database, BarChart3, Languages, AlertTriangle, Shield, TrendingUp } from "lucide-react";
+import { ArrowRight, Database, BarChart3, Languages, AlertTriangle, Shield, TrendingUp, PieChart as PieIcon } from "lucide-react";
 
 // Data for Main Data Split (93.6k rows, multilingual with safety categories)
 const mainSplitSamples = [
@@ -54,14 +54,14 @@ const binarySplitSamples = [
 
 // Main split distributions (equal across 3 languages)
 const mainLanguageDist = [
-  { lang: "bn", count: 31200, fill: "#3b82f6" },
-  { lang: "or", count: 31200, fill: "#10b981" },
-  { lang: "ml", count: 31200, fill: "#f59e0b" },
+  { lang: "Bengali", code: "bn", count: 31200, fill: "#3b82f6" },
+  { lang: "Odia", code: "or", count: 31200, fill: "#10b981" },
+  { lang: "Malayalam", code: "ml", count: 31200, fill: "#f59e0b" },
 ];
 
 // Binary split distributions (only bn)
 const binaryLanguageDist = [
-  { lang: "bn", count: 274000, fill: "#3b82f6" },
+  { lang: "Bengali", code: "bn", count: 274000, fill: "#3b82f6" },
 ];
 
 // Binary safety distribution
@@ -78,13 +78,13 @@ const profanityDistData = [
 
 // Top safety categories for main split
 const topCategoriesData = [
-  { category: "S1 (Harmful Content)", count: 20000, fill: "#ef4444" },
-  { category: "S2 (Threat)", count: 15000, fill: "#f59e0b" },
-  { category: "S6 (Violence)", count: 10000, fill: "#8b5cf6" },
-  { category: "S10 (Harassment)", count: 8000, fill: "#06b6d4" },
-  { category: "Neutral", count: 50000, fill: "#6b7280" },
+  { category: "S0 (Hate Speech)", count: 13200, percentage: "14.1%", fill: "#ef4444" },
+  { category: "S10 (Bullying)", count: 10300, percentage: "11.0%", fill: "#0ea5e9" },
+  { category: "S1 (Harmful Content)", count: 9800, percentage: "10.5%", fill: "#dc2626" },
+  { category: "S2 (Threat)", count: 8200, percentage: "8.8%", fill: "#f59e0b" },
+  { category: "S6 (Violence)", count: 7500, percentage: "8.0%", fill: "#8b5cf6" },
+  { category: "Others", count: 44600, percentage: "47.6%", fill: "#6b7280" },
 ];
-
 // Correlation matrix for binary features: profanity and harmful
 const features = ["profanity", "harmful"];
 const corrMatrix = [
@@ -94,12 +94,12 @@ const corrMatrix = [
 
 // Overall statistics data
 const overallStats = [
-  { label: "Main Split Total", value: "93,600", color: "blue-500" },
-  { label: "Binary Split Total", value: "274,000", color: "blue-600" },
-  { label: "Languages (Main)", value: "3", color: "blue-400" },
-  { label: "Languages (Binary)", value: "1", color: "blue-300" },
-  { label: "Safety Categories", value: "678", color: "blue-700" },
-  { label: "Imbalance (Binary Safe/Unsafe)", value: "1.63x", color: "blue-800" },
+  { label: "Main Split Total", value: "93,600", color: "text-blue-600" },
+  { label: "Binary Split Total", value: "274,000", color: "text-blue-700" },
+  { label: "Languages (Main)", value: "3", color: "text-blue-500" },
+  { label: "Languages (Binary)", value: "1", color: "text-blue-400" },
+  { label: "Safety Categories", value: "678", color: "text-purple-600" },
+  { label: "Imbalance (Binary Safe/Unsafe)", value: "1.63x", color: "text-amber-600" },
 ];
 
 const getHeatColor = (v: number) => {
@@ -113,88 +113,135 @@ const getHeatColor = (v: number) => {
   return `rgb(${r}, ${200 - Math.round(pv * 80)}, ${200 - Math.round(pv * 80)})`;
 };
 
+const StatCard = ({ label, value, color }: { label: string; value: string; color: string }) => (
+  <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <p className="text-sm font-medium text-gray-600 mb-1">{label}</p>
+    <p className={`text-2xl font-bold ${color}`}>{value}</p>
+  </div>
+);
+
+const LanguageBadge = ({ language }: { language: string }) => {
+  const getLanguageColor = (lang: string) => {
+    switch (lang) {
+      case "bn": return "bg-blue-100 text-blue-800 border-blue-200";
+      case "or": return "bg-emerald-100 text-emerald-800 border-emerald-200";
+      case "ml": return "bg-amber-100 text-amber-800 border-amber-200";
+      default: return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+
+  const getLanguageName = (lang: string) => {
+    switch (lang) {
+      case "bn": return "Bengali";
+      case "or": return "Odia";
+      case "ml": return "Malayalam";
+      default: return lang;
+    }
+  };
+
+  return (
+    <Badge variant="outline" className={`${getLanguageColor(language)} font-medium`}>
+      {getLanguageName(language)}
+    </Badge>
+  );
+};
+
 const Datasets = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-100/30">
       <Navigation />
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-7xl mx-auto space-y-12">
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto space-y-8">
           {/* Hero Section */}
           <div className="text-center mb-12 animate-in fade-in duration-1000">
-            <div className="inline-flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-blue-200 shadow-sm">
               <Database className="h-5 w-5 text-blue-600" />
               <span className="text-sm font-medium text-blue-600">Indic Safety Datasets</span>
             </div>
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent mb-4">
               Datasets & Samples
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Explore the Main Data Split (93.6k multilingual samples with nuanced safety categories) and Binary Split (274k Bengali samples with profanity detection), including structures, distributions, and correlations.
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Explore our comprehensive safety datasets featuring multilingual content analysis with detailed safety categorizations and binary classification for harmful content detection.
             </p>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+            {overallStats.map((stat, index) => (
+              <StatCard key={index} label={stat.label} value={stat.value} color={stat.color} />
+            ))}
           </div>
 
           {/* Tabs for Main and Binary Splits */}
           <Tabs defaultValue="main" className="space-y-8">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="main" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                <BarChart3 className="mr-2 h-4 w-4" /> Main Split
+            <TabsList className="grid w-full grid-cols-2 p-1 bg-gray-100/50 rounded-xl">
+              <TabsTrigger 
+                value="main" 
+                className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-700 rounded-lg transition-all"
+              >
+                <BarChart3 className="mr-2 h-4 w-4" /> 
+                <span className="hidden sm:inline">Main Split</span>
+                <span className="sm:hidden">Main</span>
               </TabsTrigger>
-              <TabsTrigger value="binary" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
-                <AlertTriangle className="mr-2 h-4 w-4" /> Binary Split
+              <TabsTrigger 
+                value="binary" 
+                className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-700 rounded-lg transition-all"
+              >
+                <AlertTriangle className="mr-2 h-4 w-4" /> 
+                <span className="hidden sm:inline">Binary Split</span>
+                <span className="sm:hidden">Binary</span>
               </TabsTrigger>
             </TabsList>
 
             {/* Main Split Tab */}
             <TabsContent value="main" className="space-y-8">
               {/* Structure Card */}
-              <Card className="overflow-hidden shadow-lg animate-in slide-in-from-bottom duration-700">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-blue-700">
-                    <Shield className="h-5 w-5 text-blue-500" /> Main Data Split Structure (93.6k rows)
-                  </CardTitle>
-                  <CardDescription>Multilingual (Bengali, Odia, Malayalam; 33.3% each) with detailed safety assessments via categories S1-S17.</CardDescription>
+              <Card className="overflow-hidden border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-6 border-b">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Shield className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-blue-800">Main Data Split Structure</CardTitle>
+                      <CardDescription className="text-blue-600/80">
+                        93.6k multilingual samples with detailed safety assessments
+                      </CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                   <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader>
+                      <TableHeader className="bg-gray-50/50">
                         <TableRow>
-                          <TableHead>Column</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Stats</TableHead>
+                          <TableHead className="font-semibold text-gray-700">Column</TableHead>
+                          <TableHead className="font-semibold text-gray-700">Type</TableHead>
+                          <TableHead className="font-semibold text-gray-700">Description</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        <TableRow>
-                          <TableCell>text</TableCell>
+                        <TableRow className="hover:bg-blue-50/30 transition-colors">
+                          <TableCell className="font-medium">text</TableCell>
                           <TableCell>string</TableCell>
-                          <TableCell>Lengths: 4 - 7,170 chars</TableCell>
+                          <TableCell>Multilingual text content (4-7,170 chars)</TableCell>
                         </TableRow>
-                        <TableRow>
-                          <TableCell>source</TableCell>
+                        <TableRow className="hover:bg-blue-50/30 transition-colors">
+                          <TableCell className="font-medium">language</TableCell>
                           <TableCell>string</TableCell>
-                          <TableCell>1 class: "ai4bharat/indic-align"</TableCell>
+                          <TableCell>3 languages: bn, or, ml (33.3% each)</TableCell>
                         </TableRow>
-                        <TableRow>
-                          <TableCell>language</TableCell>
-                          <TableCell>string</TableCell>
-                          <TableCell>3 classes: bn, or, ml</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>safe(0)/harmful(1)</TableCell>
+                        <TableRow className="hover:bg-blue-50/30 transition-colors">
+                          <TableCell className="font-medium">harmful</TableCell>
                           <TableCell>int64</TableCell>
-                          <TableCell>Binary: 0 (safe), 1 (harmful)</TableCell>
+                          <TableCell>Binary safety label: 0 (safe), 1 (harmful)</TableCell>
                         </TableRow>
-                        <TableRow>
-                          <TableCell>safety_categories</TableCell>
+                        <TableRow className="hover:bg-blue-50/30 transition-colors">
+                          <TableCell className="font-medium">safety_categories</TableCell>
                           <TableCell>string</TableCell>
-                          <TableCell>678 unique values (e.g., "S1 S2 S6")</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>safety_distribution</TableCell>
-                          <TableCell>object</TableCell>
-                          <TableCell>JSON probs for S1-S17 (e.g., {'{ "S1": 0.222, ... }'})</TableCell>
+                          <TableCell>S0-S17 category labels</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -202,91 +249,136 @@ const Datasets = () => {
                 </CardContent>
               </Card>
 
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Language Distribution */}
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <Languages className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-gray-800">Language Distribution</CardTitle>
+                        <CardDescription>93,600 total samples</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={mainLanguageDist}>
+                          <XAxis dataKey="lang" />
+                          <YAxis />
+                          <Tooltip 
+                            formatter={(value) => [`${value} samples`, "Count"]}
+                            labelFormatter={(label) => `Language: ${label}`}
+                          />
+                          <Bar dataKey="count" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Safety Categories */}
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-amber-100 rounded-lg">
+                        <PieIcon className="h-5 w-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-gray-800">Safety Categories</CardTitle>
+                        <CardDescription>Top 5 out of 678 categories</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={topCategoriesData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={40}
+                            outerRadius={80}
+                            paddingAngle={2}
+                            dataKey="count"
+                            label={({ category, count }) => `${category}: ${count.toLocaleString()}`}
+                          >
+                            {topCategoriesData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                          </Pie>
+                          <Tooltip formatter={(value) => [`${value} samples`, "Count"]} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
               {/* Samples Table */}
-              <Card className="overflow-hidden shadow-lg animate-in slide-in-from-bottom duration-700 delay-200">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-blue-700">
-                    <TrendingUp className="h-5 w-5 text-blue-500" /> Main Split Samples (4 shown)
-                  </CardTitle>
+              <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-6 border-b">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <TrendingUp className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-blue-800">Sample Data</CardTitle>
+                      <CardDescription className="text-blue-600/80">
+                        4 representative samples from the main split
+                      </CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Text (truncated)</TableHead>
-                        <TableHead>Source</TableHead>
-                        <TableHead>Language</TableHead>
-                        <TableHead>Harmful</TableHead>
-                        <TableHead>Safety Categories</TableHead>
-                        <TableHead>Safety Distribution (truncated)</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mainSplitSamples.map((r) => (
-                        <TableRow key={r.id} className="hover:bg-accent/50 transition-colors">
-                          <TableCell className="font-medium">{r.id}</TableCell>
-                          <TableCell className="max-w-md truncate">{r.text}</TableCell>
-                          <TableCell>{r.source}</TableCell>
-                          <TableCell>
-                            <Badge variant="secondary" className="capitalize">{r.language}</Badge>
-                          </TableCell>
-                          <TableCell><Badge variant={r.harmful === 1 ? "destructive" : "secondary"}>{r.harmful}</Badge></TableCell>
-                          <TableCell className="font-mono text-sm">{r.safety_categories}</TableCell>
-                          <TableCell className="font-mono text-xs">{r.safety_distribution}</TableCell>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="bg-gray-50/50">
+                        <TableRow>
+                          <TableHead>Text Preview</TableHead>
+                          <TableHead>Language</TableHead>
+                          <TableHead>Safety</TableHead>
+                          <TableHead>Categories</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-
-              {/* Language Distribution Chart */}
-              <Card className="overflow-hidden shadow-lg animate-in slide-in-from-left duration-700">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-blue-700">
-                    <Languages className="h-5 w-5 text-blue-500" /> Main Split Language Distribution (Total: 93,600)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={mainLanguageDist}>
-                      <XAxis dataKey="lang" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="count" fill="#3b82f6" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* Top Categories Pie Chart */}
-              <Card className="overflow-hidden shadow-lg animate-in slide-in-from-right duration-700">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-blue-700">
-                    <AlertTriangle className="h-5 w-5 text-blue-500" /> Main Split Safety Categories (Top 5 out of 678)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="h-80 flex items-center justify-center">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={topCategoriesData}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="count"
-                        label={({ name }) => name}
-                      >
-                        {topCategoriesData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                      </TableHeader>
+                      <TableBody>
+                        {mainSplitSamples.map((sample) => (
+                          <TableRow key={sample.id} className="hover:bg-blue-50/30 transition-colors group">
+                            <TableCell className="max-w-xs">
+                              <div className="space-y-1">
+                                <p className="text-sm text-gray-900 line-clamp-2 group-hover:text-gray-700">
+                                  {sample.text}
+                                </p>
+                                <p className="text-xs text-gray-500">Source: {sample.source}</p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <LanguageBadge language={sample.language} />
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={sample.harmful === 1 ? "destructive" : "secondary"}>
+                                {sample.harmful === 1 ? "Harmful" : "Safe"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Badge variant="outline" className="text-xs font-mono bg-red-50 text-red-700 border-red-200">
+                                  {sample.safety_categories}
+                                </Badge>
+                                <p className="text-xs text-gray-500 truncate max-w-[120px]">
+                                  {sample.safety_distribution}
+                                </p>
+                              </div>
+                            </TableCell>
+                          </TableRow>
                         ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -294,46 +386,43 @@ const Datasets = () => {
             {/* Binary Split Tab */}
             <TabsContent value="binary" className="space-y-8">
               {/* Structure Card */}
-              <Card className="overflow-hidden shadow-lg animate-in slide-in-from-bottom duration-700">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-blue-700">
-                    <AlertTriangle className="h-5 w-5 text-blue-500" /> Binary Split Structure (274k rows)
-                  </CardTitle>
-                  <CardDescription>Bengali-only for binary classification of profanity and harm.</CardDescription>
+              <Card className="overflow-hidden border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-amber-50 to-orange-50 pb-6 border-b">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-amber-100 rounded-lg">
+                      <AlertTriangle className="h-6 w-6 text-amber-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-amber-800">Binary Split Structure</CardTitle>
+                      <CardDescription className="text-amber-600/80">
+                        274k Bengali samples for binary classification
+                      </CardDescription>
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                   <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader>
+                      <TableHeader className="bg-gray-50/50">
                         <TableRow>
-                          <TableHead>Column</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Stats</TableHead>
+                          <TableHead className="font-semibold text-gray-700">Column</TableHead>
+                          <TableHead className="font-semibold text-gray-700">Type</TableHead>
+                          <TableHead className="font-semibold text-gray-700">Description</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        <TableRow>
-                          <TableCell>text</TableCell>
+                        <TableRow className="hover:bg-amber-50/30 transition-colors">
+                          <TableCell className="font-medium">text</TableCell>
                           <TableCell>string</TableCell>
-                          <TableCell>Bengali comments</TableCell>
+                          <TableCell>Bengali text content</TableCell>
                         </TableRow>
-                        <TableRow>
-                          <TableCell>source</TableCell>
-                          <TableCell>string</TableCell>
-                          <TableCell>1 class: "Multi Labeled Bengali Toxic Comments"</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>language</TableCell>
-                          <TableCell>string</TableCell>
-                          <TableCell>1 class: bn</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>profanity</TableCell>
+                        <TableRow className="hover:bg-amber-50/30 transition-colors">
+                          <TableCell className="font-medium">profanity</TableCell>
                           <TableCell>int64</TableCell>
                           <TableCell>Binary: 0 (none), 1 (present)</TableCell>
                         </TableRow>
-                        <TableRow>
-                          <TableCell>safe(0)/harmful(1)</TableCell>
+                        <TableRow className="hover:bg-amber-50/30 transition-colors">
+                          <TableCell className="font-medium">harmful</TableCell>
                           <TableCell>int64</TableCell>
                           <TableCell>Binary: 0 (safe), 1 (harmful)</TableCell>
                         </TableRow>
@@ -343,182 +432,144 @@ const Datasets = () => {
                 </CardContent>
               </Card>
 
-              {/* Samples Table */}
-              <Card className="overflow-hidden shadow-lg animate-in slide-in-from-bottom duration-700 delay-200">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-blue-700">
-                    <TrendingUp className="h-5 w-5 text-blue-500" /> Binary Split Samples (2 shown)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Text</TableHead>
-                        <TableHead>Source</TableHead>
-                        <TableHead>Language</TableHead>
-                        <TableHead>Profanity</TableHead>
-                        <TableHead>Harmful</TableHead>
-                        <TableHead>Safety</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {binarySplitSamples.map((r) => (
-                        <TableRow key={r.id} className="hover:bg-accent/50 transition-colors">
-                          <TableCell className="font-medium">{r.id}</TableCell>
-                          <TableCell className="max-w-md truncate">{r.text}</TableCell>
-                          <TableCell>{r.source}</TableCell>
-                          <TableCell>
-                            <Badge variant="secondary" className="capitalize">{r.language}</Badge>
-                          </TableCell>
-                          <TableCell><Badge variant={r.profanity === 1 ? "destructive" : "secondary"}>{r.profanity}</Badge></TableCell>
-                          <TableCell><Badge variant={r.harmful === 1 ? "destructive" : "secondary"}>{r.harmful}</Badge></TableCell>
-                          <TableCell>
-                            <Badge variant={r.safety === "safe" ? "default" : "destructive"}>
-                              {r.safety.toUpperCase()}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-
-              {/* Language Distribution */}
-              <Card className="overflow-hidden shadow-lg animate-in slide-in-from-left duration-700">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-blue-700">
-                    <Languages className="h-5 w-5 text-blue-500" /> Binary Split Language Distribution (Total: 274,000)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="h-64 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-6xl font-bold text-blue-600">100%</div>
-                    <div className="text-sm text-gray-500 mt-2">Bengali (bn)</div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Safety and Profanity Pie Charts */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="overflow-hidden shadow-lg animate-in slide-in-from-left duration-700">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                    <CardTitle className="flex items-center gap-2 text-blue-700">
-                      <Shield className="h-5 w-5 text-blue-500" /> Binary Safety Distribution
-                    </CardTitle>
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Safety Distribution */}
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <Shield className="h-5 w-5 text-green-600" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-gray-800">Safety Distribution</CardTitle>
+                        <CardDescription>274,000 Bengali samples</CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie data={binaryDistData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, percentage }) => `${name}: ${percentage}`}>
-                          {binaryDistData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.fill} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                  <CardContent>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={binaryDistData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={80}
+                            paddingAngle={2}
+                            dataKey="value"
+                            label={({ name, percentage }) => `${name}\n${percentage}`}
+                          >
+                            {binaryDistData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                          </Pie>
+                          <Tooltip formatter={(value, name) => [`${value.toLocaleString()} samples`, name]} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
                   </CardContent>
                 </Card>
 
-                <Card className="overflow-hidden shadow-lg animate-in slide-in-from-right duration-700">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                    <CardTitle className="flex items-center gap-2 text-blue-700">
-                      <AlertTriangle className="h-5 w-5 text-blue-500" /> Binary Profanity Distribution
-                    </CardTitle>
+                {/* Profanity Distribution */}
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-red-100 rounded-lg">
+                        <AlertTriangle className="h-5 w-5 text-red-600" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-gray-800">Profanity Distribution</CardTitle>
+                        <CardDescription>274,000 Bengali samples</CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie data={profanityDistData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, percentage }) => `${name}: ${percentage}`}>
-                          {profanityDistData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.fill} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                  <CardContent>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={profanityDistData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={80}
+                            paddingAngle={2}
+                            dataKey="value"
+                            label={({ name, percentage }) => `${name}\n${percentage}`}
+                          >
+                            {profanityDistData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                          </Pie>
+                          <Tooltip formatter={(value, name) => [`${value.toLocaleString()} samples`, name]} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
+
+              {/* Correlation Matrix */}
+              <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <TrendingUp className="h-5 w-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-gray-800">Feature Correlation</CardTitle>
+                      <CardDescription>Relationship between profanity and harmful labels</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-auto">
+                    <div className="inline-block min-w-full">
+                      <table className="w-full">
+                        <thead>
+                          <tr>
+                            <th className="p-4 text-left font-medium text-gray-700 bg-gray-50/50 rounded-l-lg" />
+                            {features.map((f) => (
+                              <th key={f} className="p-4 text-center font-medium text-gray-700 bg-gray-50/50 capitalize">
+                                {f}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {corrMatrix.map((row, i) => (
+                            <tr key={i}>
+                              <td className="p-4 font-medium text-gray-700 bg-gray-50/50 capitalize">
+                                {features[i]}
+                              </td>
+                              {row.map((v, j) => (
+                                <td key={j} className="p-4">
+                                  <div
+                                    className="rounded-lg px-4 py-3 text-center font-mono font-medium shadow-sm transition-transform hover:scale-105"
+                                    style={{ 
+                                      background: getHeatColor(v),
+                                      color: Math.abs(v) > 0.5 ? "white" : "#1f2937"
+                                    }}
+                                    title={`Correlation: ${v.toFixed(3)}`}
+                                  >
+                                    {v.toFixed(2)}
+                                  </div>
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-4 text-center">
+                    Correlation values range from -1 (perfect negative) to +1 (perfect positive)
+                  </p>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
-
-          {/* Overall Stats and Correlation */}
-          <div className="grid lg:grid-cols-2 gap-6">
-            <Card className="overflow-hidden shadow-lg animate-in slide-in-from-left duration-700">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                <CardTitle className="flex items-center gap-2 text-blue-700">
-                  <Database className="h-5 w-5 text-blue-500" /> Overall Dataset Statistics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-blue-50">
-                        <TableHead className="text-blue-700">Metric</TableHead>
-                        <TableHead className="text-blue-700">Value</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {overallStats.map((stat, index) => (
-                        <TableRow key={index} className="hover:bg-blue-25 transition-colors">
-                          <TableCell className="font-medium text-gray-700">{stat.label}</TableCell>
-                          <TableCell className={`font-bold text-${stat.color} text-xl`}>{stat.value}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden shadow-lg animate-in slide-in-from-right duration-700">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-4">
-                <CardTitle className="flex items-center gap-2 text-blue-700">
-                  <TrendingUp className="h-5 w-5 text-blue-500" /> Binary Feature Correlation Matrix
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-auto rounded-lg border">
-                  <table className="w-full">
-                    <thead>
-                      <tr>
-                        <th className="p-3 text-left font-medium" />
-                        {features.map((f) => (
-                          <th key={f} className="p-3 text-left font-medium text-blue-600">{f}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {corrMatrix.map((row, i) => (
-                        <tr key={i}>
-                          <td className="p-3 font-medium text-gray-700">{features[i]}</td>
-                          {row.map((v, j) => (
-                            <td key={j} className="p-3">
-                              <div
-                                className="rounded-md px-3 py-2 text-center font-mono text-sm shadow-sm"
-                                style={{ background: getHeatColor(v), color: "#0f172a" }}
-                                title={v.toFixed(2)}
-                              >
-                                {v.toFixed(2)}
-                              </div>
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="text-xs text-gray-500 mt-3">Heat colors map correlation values (-1 to 1) for Binary Split features.</p>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </main>
     </div>
