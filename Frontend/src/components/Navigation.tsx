@@ -20,6 +20,27 @@ const Navigation = () => {
               Home
             </NavLink>
             <NavLink 
+              to="/samples" 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              activeClassName="text-primary font-medium"
+            >
+              Samples
+            </NavLink>
+            <NavLink 
+              to="/implementation" 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              activeClassName="text-primary font-medium"
+            >
+              Implementation
+            </NavLink>
+            <NavLink 
+              to="/results" 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              activeClassName="text-primary font-medium"
+            >
+              Results
+            </NavLink>
+            <NavLink 
               to="/api" 
               className="text-muted-foreground hover:text-foreground transition-colors"
               activeClassName="text-primary font-medium"
