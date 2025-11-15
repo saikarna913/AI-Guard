@@ -85,8 +85,8 @@ def analyze(req: AnalyzeRequest):
 
     try:
         # Use Llama for advanced analysis (prompt-based JSON output)
-        #model = req.model or "meta-llama/Llama-3.2-1B-Instruct"
-        model = "meta-llama/Llama-3.2-1B-Instruct"
+        model = req.model or "meta-llama/Llama-3.2-1B-Instruct"
+        #model = "meta-llama/Llama-3.2-1B-Instruct"
         analysis_prompt = (
             "Analyze the following text for content safety and classify it. Respond ONLY with a JSON object in this exact format (no markdown, no code blocks):\n"
             "{\n"

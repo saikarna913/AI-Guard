@@ -79,8 +79,7 @@ const Index = () => {
                     <SelectValue placeholder="Choose a model" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Llama-3.2-1B">GPT (OpenAI)</SelectItem>
-                    <SelectItem value="llama">LLaMA (Meta)</SelectItem>
+                    <SelectItem value="meta-llama/Llama-3.2-1B-Instruct">Llama-3.2-1B</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -93,7 +92,6 @@ const Index = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="bengali">Bengali</SelectItem>
-                    <SelectItem value="hindi">Hindi</SelectItem>
                     <SelectItem value="odia">Odia</SelectItem>
                     <SelectItem value="malayalam">Malayalam</SelectItem>
                     <SelectItem value="kannada">Kannada</SelectItem>

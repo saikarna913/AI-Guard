@@ -66,14 +66,14 @@ const binaryLanguageDist = [
 
 // Binary safety distribution
 const binaryDistData = [
-  { name: "Safe (0)", value: 170000, percentage: "62%", fill: "#10b981" },
-  { name: "Unsafe (1)", value: 104000, percentage: "38%", fill: "#ef4444" },
+  { name: "Safe (0)", value: 170000, percentage: "40.62484%", fill: "#10b981" },
+  { name: "Unsafe (1)", value: 104000, percentage: "59.37516%", fill: "#ef4444" },
 ];
 
 // Binary profanity distribution
 const profanityDistData = [
-  { name: "Non-Profane (0)", value: 255000, percentage: "93%", fill: "#10b981" },
-  { name: "Profane (1)", value: 19000, percentage: "7%", fill: "#ef4444" },
+  { name: "Non-Profane (0)", value: 255000, percentage: "97.46%", fill: "#10b981" },
+  { name: "Profane (1)", value: 19000, percentage: "2.53%", fill: "#ef4444" },
 ];
 
 // Top safety categories for main split
@@ -98,7 +98,7 @@ const overallStats = [
   { label: "Binary Split Total", value: "274,000", color: "text-blue-700" },
   { label: "Languages (Main)", value: "3", color: "text-blue-500" },
   { label: "Languages (Binary)", value: "1", color: "text-blue-400" },
-  { label: "Safety Categories", value: "678", color: "text-purple-600" },
+  { label: "Safety Categories", value: "18", color: "text-purple-600" },
   { label: "Imbalance (Binary Safe/Unsafe)", value: "1.63x", color: "text-amber-600" },
 ];
 
@@ -289,7 +289,7 @@ const Datasets = () => {
                       </div>
                       <div>
                         <CardTitle className="text-gray-800">Safety Categories</CardTitle>
-                        <CardDescription>Top 5 out of 678 categories</CardDescription>
+                        <CardDescription>18 categories Distribution</CardDescription>
                       </div>
                     </div>
                   </CardHeader>
