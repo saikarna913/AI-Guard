@@ -54,13 +54,6 @@ const Navigation = () => {
             >
               Contact
             </NavLink>
-            <NavLink 
-              to="/about" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              activeClassName="text-primary font-medium"
-            >
-              About Us
-            </NavLink>
           </div>
         </div>
       </div>
