@@ -2,12 +2,8 @@ import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import AblationTable from "./Ablation";
 
-const ablationRows = [
-  { approach: "Full Model", removed: "—", accuracy: 86.7, f1: 0.84 },
-  { approach: "No Augmentation", removed: "Data Augmentation", accuracy: 83.2, f1: 0.80 },
-  { approach: "No Ensembling", removed: "Ensembling", accuracy: 84.5, f1: 0.81 },
-];
 
 const metrics = [
   { name: "Baseline", precision: 0.7, recall: 0.68, f1: 0.69 },
@@ -40,14 +36,19 @@ const Experiments = () => {
             <p className="text-muted-foreground">Ablation studies, metric breakdowns, plots and key findings from prior work.</p>
           </div>
 
-          <ImplementationPlan />
+         {/* <ImplementationPlan />*/}
 
           {/* Flow Chart Section */}
           <Card className="p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-center">System Flow Chart</h2>
+<h2 className="text-2xl font-semibold mb-6 text-center w-fit mx-auto px-4 py-1 
+    border border-primary/30 rounded-md backdrop-blur-sm bg-background/40">
+  System Flow Chart
+</h2>
+
+
             <div className="flex justify-center">
               <img
-                src="/FlowChart.jpg" 
+                src="./flowchart.jpg" 
                 alt="System Flow Chart"
                 className="max-w-full h-auto rounded-lg shadow-lg"
                 style={{ maxHeight: "400px", objectFit: "contain" }}
@@ -55,30 +56,7 @@ const Experiments = () => {
             </div>
           </Card>
 
-          <Card className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">Ablation Study</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Approach</TableHead>
-                  <TableHead>Removed Component</TableHead>
-                  <TableHead>Accuracy</TableHead>
-                  <TableHead>F1</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {ablationRows.map((r) => (
-                  <TableRow key={r.approach}>
-                    <TableCell>{r.approach}</TableCell>
-                    <TableCell>{r.removed}</TableCell>
-                    <TableCell>{r.accuracy}%</TableCell>
-                    <TableCell>{r.f1.toFixed(2)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableCaption>Contribution of model components (illustrative).</TableCaption>
-            </Table>
-          </Card>
+          <AblationTable />
 
           <Card className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Metric Comparisons</h2>
