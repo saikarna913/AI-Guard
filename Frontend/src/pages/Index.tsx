@@ -9,6 +9,15 @@ import { useState } from "react";
 import { analyzeText } from "@/integrations/backend/client";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, CheckCircle, Loader2, Shield, ChevronDown } from "lucide-react";
+import { ReactTransliterate ,Language} from "react-transliterate";
+import "react-transliterate/dist/index.css";
+
+const langCodeMap: Record<string, Language> = {
+  bengali: "bn",
+  odia: "or",
+  malayalam: "ml",
+  kannada: "kn",
+};
 
 const Index = () => {
   const { toast } = useToast();
@@ -102,13 +111,19 @@ const Index = () => {
 
             <div className="mb-6">
               <Label htmlFor="text" className="mb-2 block">Enter Text to Analyze</Label>
-              <Textarea
-                id="text"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Type or paste your text here for analysis..."
-                className="min-h-[250px] text-base"
-              />
+              <ReactTransliterate
+              value={text}
+              onChangeText={setText}
+              lang={langCodeMap[language] || ("en" as Language)}
+              renderComponent={(props) => (
+                <Textarea
+                  {...props}
+                  placeholder="Type or paste your text here for analysis..."
+                  className="min-h-[250px] w-full rounded-md border border-input bg-background px-3 py-2 text-base"
+                  style={{ paddingTop: "0.5rem" }}
+                />
+              )}
+            />
             </div>
 
             <Button 
