@@ -15,10 +15,7 @@ export const ta = {
   title: "PhD Student (Prime Minister Research Fellow), Computer Science & Engineering",
   short: "Research interests: Robust and Interpretable NLP, toxicity & safety in multilingual models.",
   socials: {
-    linkedin: "#",
-    twitter: "#",
-    huggingface: "#",
-    instagram: "#",
+    linkedin: "https://www.linkedin.com/in/himanshubeniwal/",
   },
   image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Himanshu",
 };

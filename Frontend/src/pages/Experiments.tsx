@@ -42,6 +42,19 @@ const Experiments = () => {
 
           <ImplementationPlan />
 
+          {/* Flow Chart Section */}
+          <Card className="p-6">
+            <h2 className="text-2xl font-semibold mb-4 text-center">System Flow Chart</h2>
+            <div className="flex justify-center">
+              <img
+                src="/FlowChart.jpg" 
+                alt="System Flow Chart"
+                className="max-w-full h-auto rounded-lg shadow-lg"
+                style={{ maxHeight: "400px", objectFit: "contain" }}
+              />
+            </div>
+          </Card>
+
           <Card className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Ablation Study</h2>
             <Table>
