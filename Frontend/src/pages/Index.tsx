@@ -22,6 +22,12 @@ import {
 } from "lucide-react";
 import { ReactTransliterate, Language } from "react-transliterate";
 import "react-transliterate/dist/index.css";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const langCodeMap: Record<string, Language> = {
   bengali: "bn",
@@ -36,6 +42,46 @@ interface Result {
   score: number;
   distribution?: Record<string, number>;
 }
+const CATEGORY_LABELS: Record<string, string> = {
+  S1: "Violent Crimes",
+  S2: "Non-Violent Crimes",
+  S3: "Sex Crimes",
+  S4: "Child Exploitation",
+  S5: "Defamation",
+  S6: "Specialized Advice",
+  S7: "Privacy",
+  S8: "Intellectual Property",
+  S9: "Indiscriminate Weapons",
+  S10: "Hate",
+  S11: "Self-Harm",
+  S12: "Sexual Content",
+  S13: "Elections",
+  S14: "Code Interpreter Abuse",
+  S15: "Religious Intolerance",
+  S16: "Gender-based Abuse",
+  S17: "Trolling / Cyberbullying"
+};
+
+const COLORS = [
+  "#6366F1", // Indigo
+  "#8B5CF6", // Violet
+  "#EC4899", // Pink
+  "#F97316", // Orange
+  "#F59E0B", // Amber
+  "#10B981", // Emerald
+  "#14B8A6", // Teal
+  "#0EA5E9", // Sky Blue
+  "#3B82F6", // Blue
+  "#A855F7", // Purple
+  "#22C55E", // Green
+  "#84CC16", // Lime
+  "#D946EF", // Fuchsia
+  "#06B6D4", // Cyan
+  "#EF4444", // Red
+  "#F43F5E", // Rose
+  "#EAB308", // Yellow
+  "#4ADE80"  // Light Green
+];
 
 const Index = () => {
   const { toast } = useToast();
@@ -206,39 +252,63 @@ const Index = () => {
                 </div>
 
                 {/* Distribution Line */}
-                <div className="p-4 rounded-lg bg-primary/5">
-                  <h3 className="font-semibold mb-4 text-lg">Score Distribution</h3>
 
-                  <div className="w-full flex h-6 rounded overflow-hidden border border-primary/20">
-                    {Object.entries(result.distribution || {}).map(([key, value]) => {
-                      if (typeof value !== "number") return null;
-                      const width = `${value * 100}%`;
-                      return value > 0 ? (
-                        <div
-                          key={key}
-                          className="h-full"
-                          style={{
-                            width,
-                            backgroundColor: "hsl(220 90% 56%)",
-                            opacity: 0.5,
-                            borderRight: "1px solid white",
-                          }}
-                          title={`${key}: ${(value * 100).toFixed(1)}%`}
-                        ></div>
-                      ) : null;
-                    })}
-                  </div>
+<div className="p-4 rounded-lg bg-primary/5">
+  <h3 className="font-semibold mb-4 text-lg">Score Distribution</h3>
 
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {Object.entries(result.distribution || {}).map(([key, value]) =>
-                      typeof value === "number" && value > 0 ? (
-                        <Badge key={key} className="px-3 py-1">
-                          {key}: {(value * 100).toFixed(1)}%
-                        </Badge>
-                      ) : null
-                    )}
-                  </div>
-                </div>
+  {/* BEAUTIFUL BAR */}
+<TooltipProvider delayDuration={0}>
+  <div className="w-full flex h-5 rounded-xl overflow-hidden shadow-sm border border-primary/10">
+    {Object.entries(result.distribution || {}).map(([key, value], index) => {
+      if (typeof value !== "number" || value <= 0) return null;
+
+      const width = `${value * 100}%`;
+      const color = COLORS[index % COLORS.length];
+      const label = CATEGORY_LABELS[key] || key;
+
+      return (
+        <div
+          key={key}
+          style={{
+            width,
+            backgroundColor: color,
+            opacity: 0.7,
+            transition: "width 0.4s ease",
+          }}
+          title={`${key}: ${label} — ${(value * 100).toFixed(1)}%`}
+        ></div>
+      );
+    })}
+  </div>
+
+  {/* BADGES */}
+  <div className="flex flex-wrap gap-2 mt-4">
+    {Object.entries(result.distribution || {}).map(([key, value], index) => {
+      if (typeof value !== "number" || value <= 0) return null;
+
+      const color = COLORS[index % COLORS.length];
+      const label = CATEGORY_LABELS[key] || key;
+
+      return (
+        <Badge
+          key={key}
+          className="px-3 py-1 rounded-lg shadow"
+          style={{
+            backgroundColor: color,
+            color: "white",
+          }}
+          title={label}
+        >
+          {key}: {(value * 100).toFixed(1)}%
+        </Badge>
+      );
+    })}
+  </div>
+  </TooltipProvider>
+</div>
+
+
+
 
                 <div className="p-4 bg-muted/50 rounded-lg border border-border">
                   <p className="text-sm text-muted-foreground">
