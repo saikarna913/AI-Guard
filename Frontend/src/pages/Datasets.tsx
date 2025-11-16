@@ -167,8 +167,8 @@ const corrMatrix = [
 
 // Overall statistics data
 const overallStats = [
-  { label: "Main Split Total", value: "93,600", color: "text-blue-600" },
-  { label: "Binary Split Total", value: "274,000", color: "text-blue-700" },
+  { label: "Main Split Total", value: "138,771", color: "text-blue-600" },
+  { label: "Binary Split Total", value: "274,246", color: "text-blue-700" },
   { label: "Languages (Main)", value: "4", color: "text-blue-500" },
   { label: "Languages (Binary)", value: "4", color: "text-blue-400" },
   { label: "Safety Categories", value: "18", color: "text-purple-600" },
