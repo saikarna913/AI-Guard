@@ -45,9 +45,10 @@ const binarySplitSamples = [
 
 // Main split distributions (equal across 3 languages)
 const mainLanguageDist = [
-  { lang: "Bengali", code: "bn", count: 31200, fill: "#3b82f6" },
-  { lang: "Odia", code: "or", count: 31200, fill: "#10b981" },
-  { lang: "Malayalam", code: "ml", count: 31200, fill: "#f59e0b" },
+  { lang: "Bengali", code: "bn", count: 45144, fill: "#3b82f6" },
+  { lang: "Odia", code: "or", count: 31209, fill: "#10b981" },
+  { lang: "Malayalam", code: "ml", count: 31209, fill: "#f59e0b" },
+  { lang: "kannada", code: "ml", count: 31209, fill: "#e69fd6ff" },
 ];
 
 // Binary split distributions (only bn)
@@ -55,27 +56,108 @@ const binaryLanguageDist = [
   { lang: "Bengali", code: "bn", count: 274000, fill: "#3b82f6" },
 ];
 
-// Binary safety distribution
+// Binary safety distribution by language - updated data
+const binarySafetyByLanguage = [
+  { language: "Bengali", code: "bn", safe_count: 24942, harmful_count: 46500, total: 71442 },
+  { language: "Odia", code: "or", safe_count: 30000, harmful_count: 32565, total: 62565 },
+  { language: "Malayalam", code: "ml", safe_count: 26933, harmful_count: 41065, total: 67998 },
+  { language: "Kannada", code: "kn", safe_count: 29537, harmful_count: 42704, total: 72241 },
+];
+
+// Calculate percentages for each language
+const binarySafetyWithPercentages = binarySafetyByLanguage.map(lang => ({
+  ...lang,
+  safe_percentage: ((lang.safe_count / lang.total) * 100).toFixed(2),
+  harmful_percentage: ((lang.harmful_count / lang.total) * 100).toFixed(2),
+}));
+
+// Overall binary safety distribution
 const binaryDistData = [
-  { name: "Safe (0)", value: 170000, percentage: "40.62484%", fill: "#10b981" },
-  { name: "Unsafe (1)", value: 104000, percentage: "59.37516%", fill: "#ef4444" },
+  { 
+    name: "Safe (0)", 
+    value: binarySafetyByLanguage.reduce((sum, lang) => sum + lang.safe_count, 0), 
+    percentage: ((binarySafetyByLanguage.reduce((sum, lang) => sum + lang.safe_count, 0) / binarySafetyByLanguage.reduce((sum, lang) => sum + lang.total, 0)) * 100).toFixed(2) + "%", 
+    fill: "#10b981" 
+  },
+  { 
+    name: "Unsafe (1)", 
+    value: binarySafetyByLanguage.reduce((sum, lang) => sum + lang.harmful_count, 0), 
+    percentage: ((binarySafetyByLanguage.reduce((sum, lang) => sum + lang.harmful_count, 0) / binarySafetyByLanguage.reduce((sum, lang) => sum + lang.total, 0)) * 100).toFixed(2) + "%", 
+    fill: "#ef4444" 
+  },
+];
+// Binary profanity distribution by language - new data
+const binaryProfanityByLanguage = [
+  {  language: "Bengali", code: "bn", non_profane_count: 67746, profane_count: 3696, total: 71442 },
+  { language: "Kannada", code: "kn", non_profane_count: 69923, profane_count: 2318, total: 72241 },
+  { language: "Malayalam", code: "ml", non_profane_count: 67054, profane_count: 944, total: 67998 },
+  { language: "Odia", code: "or", non_profane_count: 62565, profane_count: 0, total: 62565 },
 ];
 
-// Binary profanity distribution
+// Calculate percentages for each language
+const binaryProfanityWithPercentages = binaryProfanityByLanguage.map(lang => ({
+  ...lang,
+  non_profane_percentage: ((lang.non_profane_count / lang.total) * 100).toFixed(2),
+  profane_percentage: ((lang.profane_count / lang.total) * 100).toFixed(2),
+}));
+
+// Overall binary profanity distribution
 const profanityDistData = [
-  { name: "Non-Profane (0)", value: 255000, percentage: "97.46%", fill: "#10b981" },
-  { name: "Profane (1)", value: 19000, percentage: "2.53%", fill: "#ef4444" },
+  { 
+    name: "Non-Profane (0)", 
+    value: binaryProfanityByLanguage.reduce((sum, lang) => sum + lang.non_profane_count, 0), 
+    percentage:  "97.46%", 
+    fill: "#10b981" 
+  },
+  { 
+    name: "Profane (1)", 
+    value: binaryProfanityByLanguage.reduce((sum, lang) => sum + lang.profane_count, 0), 
+    percentage: "2.54%", 
+    fill: "#ef4444" 
+  },
 ];
 
-// Top safety categories for main split
-const topCategoriesData = [
-  { category: "S0 (Hate Speech)", count: 13200, percentage: "14.1%", fill: "#ef4444" },
-  { category: "S10 (Bullying)", count: 10300, percentage: "11.0%", fill: "#0ea5e9" },
-  { category: "S1 (Harmful Content)", count: 9800, percentage: "10.5%", fill: "#dc2626" },
-  { category: "S2 (Threat)", count: 8200, percentage: "8.8%", fill: "#f59e0b" },
-  { category: "S6 (Violence)", count: 7500, percentage: "8.0%", fill: "#8b5cf6" },
-  { category: "Others", count: 44600, percentage: "47.6%", fill: "#6b7280" },
+// Safety categories data from your SQL results
+const safetyCategoriesData = [
+  { category: "S1", count: 122867, percentage: 88.54, fill: "#ef4444" },
+  { category: "S2", count: 35304, percentage: 25.44, fill: "#dc2626" },
+  { category: "S3", count: 21804, percentage: 15.71, fill: "#f59e0b" },
+  { category: "S4", count: 8156, percentage: 5.88, fill: "#eab308" },
+  { category: "S5", count: 2124, percentage: 1.53, fill: "#84cc16" },
+  { category: "S6", count: 31000, percentage: 22.34, fill: "#10b981" },
+  { category: "S7", count: 13808, percentage: 9.95, fill: "#0ea5e9" },
+  { category: "S8", count: 1296, percentage: 0.93, fill: "#3b82f6" },
+  { category: "S9", count: 328, percentage: 0.24, fill: "#8b5cf6" },
+  { category: "S10", count: 55551, percentage: 40.03, fill: "#a855f7" },
+  { category: "S11", count: 1760, percentage: 1.27, fill: "#d946ef" },
+  { category: "S12", count: 13261, percentage: 9.56, fill: "#ec4899" },
+  { category: "S13", count: 3531, percentage: 2.54, fill: "#f97316" },
+  { category: "S14", count: 6980, percentage: 5.03, fill: "#64748b" },
+  { category: "S15", count: 3796, percentage: 2.74, fill: "#6b7280" },
+  { category: "S16", count: 2432, percentage: 1.75, fill: "#374151" },
+  { category: "S17", count: 27081, percentage: 19.51, fill: "#1f2937" }
 ];
+
+// Top categories for the pie chart (showing top 6 + others)
+const topCategoriesData = [
+  { category: "S1 (88.54%)", count: 122867, percentage: 88.54, fill: "#ef4444" },
+  { category: "S10 (40.03%)", count: 55551, percentage: 40.03, fill: "#a855f7" },
+  { category: "S2 (25.44%)", count: 35304, percentage: 25.44, fill: "#dc2626" },
+  { category: "S6 (22.34%)", count: 31000, percentage: 22.34, fill: "#10b981" },
+  { category: "S17 (19.51%)", count: 27081, percentage: 19.51, fill: "#1f2937" },
+  { category: "S3 (15.71%)", count: 21804, percentage: 15.71, fill: "#f59e0b" },
+  { 
+    category: "Others", 
+    count: safetyCategoriesData
+      .filter(item => !["S1", "S10", "S2", "S6", "S17", "S3"].includes(item.category))
+      .reduce((sum, item) => sum + item.count, 0),
+    percentage: safetyCategoriesData
+      .filter(item => !["S1", "S10", "S2", "S6", "S17", "S3"].includes(item.category))
+      .reduce((sum, item) => sum + item.percentage, 0),
+    fill: "#6b7280" 
+  },
+];
+
 // Correlation matrix for binary features: profanity and harmful
 const features = ["profanity", "harmful"];
 const corrMatrix = [
@@ -116,6 +198,7 @@ const LanguageBadge = ({ language }: { language: string }) => {
       case "bn": return "bg-blue-100 text-blue-800 border-blue-200";
       case "or": return "bg-emerald-100 text-emerald-800 border-emerald-200";
       case "ml": return "bg-amber-100 text-amber-800 border-amber-200";
+      case "kn": return "bg-purple-100 text-purple-800 border-purple-200";
       default: return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
@@ -125,6 +208,7 @@ const LanguageBadge = ({ language }: { language: string }) => {
       case "bn": return "Bengali";
       case "or": return "Odia";
       case "ml": return "Malayalam";
+      case "kn": return "Kannada";
       default: return lang;
     }
   };
@@ -243,6 +327,11 @@ const Datasets = () => {
                           <TableCell>string</TableCell>
                           <TableCell>S0-S17 category labels</TableCell>
                         </TableRow>
+                        <TableRow className="hover:bg-blue-50/30 transition-colors">
+                          <TableCell className="font-medium">safety_distribution</TableCell>
+                          <TableCell>string</TableCell>
+                          <TableCell>"S1": 0.2,"S2": 0.66,"S3": 0,"S4": 0,"S5": 0,"S6": 0.15,"S7": 0,"S8": 0,"S9": 0,"S10": 0,"S11": 0,"S12": 0,"S13": 0,"S14": 0,"S15": 0,"S16": 0,"S17": 0</TableCell>
+                        </TableRow>
                       </TableBody>
                     </Table>
                   </div>
@@ -259,7 +348,7 @@ const Datasets = () => {
                       </div>
                       <div>
                         <CardTitle className="text-gray-800">Language Distribution</CardTitle>
-                        <CardDescription>93,600 total samples</CardDescription>
+                        <CardDescription>138,771 total samples</CardDescription>
                       </div>
                     </div>
                   </CardHeader>
@@ -282,43 +371,128 @@ const Datasets = () => {
 
                 {/* Safety Categories */}
                 <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-amber-100 rounded-lg">
-                        <PieIcon className="h-5 w-5 text-amber-600" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-gray-800">Safety Categories</CardTitle>
-                        <CardDescription>18 categories Distribution</CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={topCategoriesData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={40}
-                            outerRadius={80}
-                            paddingAngle={2}
-                            dataKey="count"
-                            label={({ category, count }) => `${category}: ${count.toLocaleString()}`}
-                          >
-                            {topCategoriesData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.fill} />
-                            ))}
-                          </Pie>
-                          <Tooltip formatter={(value) => [`${value} samples`, "Count"]} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
+  <CardHeader className="pb-4">
+    <div className="flex items-center gap-3">
+      <div className="p-2 bg-amber-100 rounded-lg">
+        <PieIcon className="h-5 w-5 text-amber-600" />
+      </div>
+      <div>
+        <CardTitle className="text-gray-800">Safety Categories Distribution</CardTitle>
+        <CardDescription>Top safety categories with percentages</CardDescription>
+      </div>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <div className="h-80">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={topCategoriesData}
+            cx="50%"
+            cy="50%"
+            innerRadius={60}
+            outerRadius={100}
+            paddingAngle={2}
+            dataKey="count"
+            label={({ category, percentage }) => `${category}`}
+            labelLine={false}
+          >
+            {topCategoriesData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.fill} />
+            ))}
+          </Pie>
+          <Tooltip 
+            formatter={(value, name, props) => [
+              `${value.toLocaleString()} samples (${props.payload.percentage.toFixed(2)}%)`,
+              "Count"
+            ]}
+          />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+    
+  </CardContent>
+</Card>
               </div>
-
+{/* Additional data table for all categories */}
+<div className="mt-8">
+  <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+      <h4 className="font-semibold text-gray-800 text-lg">All Safety Categories</h4>
+      <p className="text-sm text-gray-600 mt-1">Complete breakdown of safety category distribution</p>
+    </div>
+    <div className="overflow-x-auto max-h-80 overflow-y-auto">
+      <Table>
+        <TableHeader className="bg-gray-50/80 sticky top-0">
+          <TableRow>
+            <TableHead className="font-semibold text-gray-700 py-4">Category</TableHead>
+            <TableHead className="font-semibold text-gray-700 text-right py-4">Count</TableHead>
+            <TableHead className="font-semibold text-gray-700 text-right py-4">Percentage</TableHead>
+            <TableHead className="font-semibold text-gray-700 text-right py-4 w-24">Bar</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="bg-white divide-y divide-gray-100">
+          {safetyCategoriesData.map((item, index) => (
+            <TableRow 
+              key={item.category} 
+              className="hover:bg-blue-50/30 transition-all duration-200 group"
+            >
+              <TableCell className="py-3">
+                <div className="flex items-center gap-3">
+                  <div 
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: item.fill }}
+                  ></div>
+                  <span className="font-medium text-gray-900 group-hover:text-blue-700">
+                    S{item.category.replace('S', '')}
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell className="text-right py-3">
+                <span className="font-semibold text-gray-900">
+                  {item.count.toLocaleString()}
+                </span>
+              </TableCell>
+              <TableCell className="text-right py-3">
+                <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full text-sm">
+                  {item.percentage.toFixed(1)}%
+                </span>
+              </TableCell>
+              <TableCell className="py-3">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="h-2 rounded-full transition-all duration-500"
+                    style={{ 
+                      width: `${item.percentage}%`,
+                      backgroundColor: item.fill,
+                      maxWidth: '100%'
+                    }}
+                  ></div>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+    {/* Total Footer */}
+   {/* <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-t border-gray-200 px-6 py-4">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          <span className="font-semibold text-gray-800">Total Samples</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="text-right">
+            <span className="font-bold text-gray-900 text-lg">138,771</span>
+            <span className="text-green-600 font-semibold ml-2">100%</span>
+          </div>
+        </div>
+      </div>
+    </div>*/}
+  </div>
+</div>
               {/* Samples Table */}
               <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
   <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-6 border-b">
@@ -435,6 +609,11 @@ const Datasets = () => {
                           <TableCell>raw text content</TableCell>
                         </TableRow>
                         <TableRow className="hover:bg-amber-50/30 transition-colors">
+                          <TableCell className="font-medium">Language</TableCell>
+                          <TableCell>int64</TableCell>
+                          <TableCell>kn(Kannada),bn(Bengali),ml(Malayalam),or(Odia)</TableCell>
+                        </TableRow>
+                        <TableRow className="hover:bg-amber-50/30 transition-colors">
                           <TableCell className="font-medium">profanity</TableCell>
                           <TableCell>int64</TableCell>
                           <TableCell>Binary: 0 (none), 1 (present)</TableCell>
@@ -450,83 +629,261 @@ const Datasets = () => {
                 </CardContent>
               </Card>
 
-              <div className="grid lg:grid-cols-2 gap-8">
-                {/* Safety Distribution */}
-                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-100 rounded-lg">
-                        <Shield className="h-5 w-5 text-green-600" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-gray-800">Safety Distribution</CardTitle>
-                        <CardDescription>274,000 samples</CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={binaryDistData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={60}
-                            outerRadius={80}
-                            paddingAngle={2}
-                            dataKey="value"
-                            label={({ name, percentage }) => `${name}\n${percentage}`}
-                          >
-                            {binaryDistData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.fill} />
-                            ))}
-                          </Pie>
-                          <Tooltip formatter={(value, name) => [`${value.toLocaleString()} samples`, name]} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
+<div className="grid lg:grid-cols-2 gap-8">
+  {/* Safety Distribution by Language */}
+  <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+    <CardHeader className="pb-4">
+      <div className="flex items-center gap-3">
+        <div className="p-2 bg-green-100 rounded-lg">
+          <Shield className="h-5 w-5 text-green-600" />
+        </div>
+        <div>
+          <CardTitle className="text-gray-800">Safety Distribution by Language</CardTitle>
+          <CardDescription>Breakdown of safe vs harmful content across languages</CardDescription>
+        </div>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-6">
+        {/* Overall Safety Distribution */}
+        <div className="text-center">
+          <h4 className="font-semibold text-gray-700 mb-3">Overall Safety Distribution</h4>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={binaryDistData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={70}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  label={({ percentage }) => `${percentage}`}
+                  labelLine={false}
+                >
+                  {binaryDistData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  formatter={(value: number, name: string) => [
+                    `${value.toLocaleString()} samples`,
+                    name
+                  ]}
+                />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 text-sm text-gray-600">
+            Total: {binaryDistData.reduce((sum, item) => sum + item.value, 0).toLocaleString()} samples
+          </div>
+        </div>
 
-                {/* Profanity Distribution */}
-                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-red-100 rounded-lg">
-                        <AlertTriangle className="h-5 w-5 text-red-600" />
+        {/* Language-wise Breakdown */}
+        <div>
+          <h4 className="font-semibold text-gray-700 mb-3 text-center">Language-wise Breakdown</h4>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="font-semibold">Language</TableHead>
+                  <TableHead className="font-semibold text-right">Total Samples</TableHead>
+                  <TableHead className="font-semibold text-right">Safe</TableHead>
+                  <TableHead className="font-semibold text-right">Safe %</TableHead>
+                  <TableHead className="font-semibold text-right">Harmful</TableHead>
+                  <TableHead className="font-semibold text-right">Harmful %</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {binarySafetyWithPercentages.map((lang) => (
+                  <TableRow key={lang.code} className="hover:bg-gray-50/50 transition-colors">
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <LanguageBadge language={lang.code} />
+                        <span className="font-medium">{lang.language}</span>
                       </div>
-                      <div>
-                        <CardTitle className="text-gray-800">Profanity Distribution</CardTitle>
-                        <CardDescription>274,000 samples</CardDescription>
+                    </TableCell>
+                    <TableCell className="text-right font-medium">
+                      {lang.total.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                        {lang.safe_count.toLocaleString()}
                       </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={profanityDistData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={60}
-                            outerRadius={80}
-                            paddingAngle={2}
-                            dataKey="value"
-                            label={({ name, percentage }) => `${name}\n${percentage}`}
-                          >
-                            {profanityDistData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.fill} />
-                            ))}
-                          </Pie>
-                          <Tooltip formatter={(value, name) => [`${value.toLocaleString()} samples`, name]} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                    </TableCell>
+                    <TableCell className="text-right text-green-600 font-medium">
+                      {lang.safe_percentage}%
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        {lang.harmful_count.toLocaleString()}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right text-red-600 font-medium">
+                      {lang.harmful_percentage}%
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {/* Total Row */}
+                <TableRow className="bg-gray-50/70 font-semibold">
+                  <TableCell>Total</TableCell>
+                  <TableCell className="text-right">
+                    {binarySafetyWithPercentages.reduce((sum, lang) => sum + lang.total, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {binarySafetyWithPercentages.reduce((sum, lang) => sum + lang.safe_count, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right text-green-600">
+                    {((binarySafetyWithPercentages.reduce((sum, lang) => sum + lang.safe_count, 0) / 
+                      binarySafetyWithPercentages.reduce((sum, lang) => sum + lang.total, 0)) * 100).toFixed(2)}%
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {binarySafetyWithPercentages.reduce((sum, lang) => sum + lang.harmful_count, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right text-red-600">
+                    {((binarySafetyWithPercentages.reduce((sum, lang) => sum + lang.harmful_count, 0) / 
+                      binarySafetyWithPercentages.reduce((sum, lang) => sum + lang.total, 0)) * 100).toFixed(2)}%
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+
+  {/* Profanity Distribution by Language */}
+  <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+    <CardHeader className="pb-4">
+      <div className="flex items-center gap-3">
+        <div className="p-2 bg-red-100 rounded-lg">
+          <AlertTriangle className="h-5 w-5 text-red-600" />
+        </div>
+        <div>
+          <CardTitle className="text-gray-800">Profanity Distribution by Language</CardTitle>
+          <CardDescription>Breakdown of profane vs non-profane content across languages</CardDescription>
+        </div>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-6">
+        {/* Overall Profanity Distribution */}
+        <div className="text-center">
+          <h4 className="font-semibold text-gray-700 mb-3">Overall Profanity Distribution</h4>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={profanityDistData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={70}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  label={({ percentage }) => `${percentage}`}
+                  labelLine={false}
+                >
+                  {profanityDistData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  formatter={(value: number, name: string) => [
+                    `${value.toLocaleString()} samples`,
+                    name
+                  ]}
+                />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 text-sm text-gray-600">
+            Total: {profanityDistData.reduce((sum, item) => sum + item.value, 0).toLocaleString()} samples
+          </div>
+        </div>
+
+        {/* Language-wise Breakdown */}
+        <div>
+          <h4 className="font-semibold text-gray-700 mb-3 text-center">Language-wise Breakdown</h4>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="font-semibold">Language</TableHead>
+                  <TableHead className="font-semibold text-right">Total Samples</TableHead>
+                  <TableHead className="font-semibold text-right">Non-Profane</TableHead>
+                  <TableHead className="font-semibold text-right">Non-Profane %</TableHead>
+                  <TableHead className="font-semibold text-right">Profane</TableHead>
+                  <TableHead className="font-semibold text-right">Profane %</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {binaryProfanityWithPercentages.map((lang) => (
+                  <TableRow key={lang.code} className="hover:bg-gray-50/50 transition-colors">
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <LanguageBadge language={lang.code} />
+                        <span className="font-medium">{lang.language}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right font-medium">
+                      {lang.total.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                        {lang.non_profane_count.toLocaleString()}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right text-green-600 font-medium">
+                      {lang.non_profane_percentage}%
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        {lang.profane_count.toLocaleString()}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right text-red-600 font-medium">
+                      {lang.profane_percentage}%
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {/* Total Row */}
+                <TableRow className="bg-gray-50/70 font-semibold">
+                  <TableCell>Total</TableCell>
+                  <TableCell className="text-right">
+                    {binaryProfanityWithPercentages.reduce((sum, lang) => sum + lang.total, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {binaryProfanityWithPercentages.reduce((sum, lang) => sum + lang.non_profane_count, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right text-green-600">
+                    {((binaryProfanityWithPercentages.reduce((sum, lang) => sum + lang.non_profane_count, 0) / 
+                      binaryProfanityWithPercentages.reduce((sum, lang) => sum + lang.total, 0)) * 100).toFixed(2)}%
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {binaryProfanityWithPercentages.reduce((sum, lang) => sum + lang.profane_count, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right text-red-600">
+                    {((binaryProfanityWithPercentages.reduce((sum, lang) => sum + lang.profane_count, 0) / 
+                      binaryProfanityWithPercentages.reduce((sum, lang) => sum + lang.total, 0)) * 100).toFixed(2)}%
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
               
               {/* Binary Split Sample Data Table */}
 <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm mt-8">
@@ -548,11 +905,11 @@ const Datasets = () => {
       <Table>
         <TableHeader className="bg-gray-50/50">
           <TableRow>
-            <TableHead>Text Preview</TableHead>
+            <TableHead>Text</TableHead>
             <TableHead>Source</TableHead>
             <TableHead>Language</TableHead>
             <TableHead>Profanity</TableHead>
-            <TableHead>Harmful</TableHead>
+            <TableHead>Safe(0)/Harmful(1)</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

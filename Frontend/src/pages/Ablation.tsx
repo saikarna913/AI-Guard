@@ -32,57 +32,57 @@ const Ablation = () => {
             </p>
 
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Setting</TableHead>
-                  <TableHead>Samples</TableHead>
-                  <TableHead>Accuracy</TableHead>
-                  <TableHead>SAFE (P/R/F1)</TableHead>
-                  <TableHead>UNSAFE (P/R/F1)</TableHead>
-                  <TableHead>Latency (s)</TableHead>
-                </TableRow>
-              </TableHeader>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Setting</TableHead>
+      <TableHead>Samples</TableHead>
+      <TableHead>Accuracy</TableHead>
+      <TableHead>SAFE (F1)</TableHead>
+      <TableHead>UNSAFE (F1)</TableHead>
+      <TableHead>Latency (s)</TableHead>
+    </TableRow>
+  </TableHeader>
 
-              <TableBody>
-                <TableRow>
-                  <TableCell>Zero-shot (Llama-3.2-1B-Instruct - untrained)</TableCell>
-                  <TableCell>3300</TableCell>
-                  <TableCell>—</TableCell>
-                  <TableCell>0.5347 / 0.7869 / 0.6367</TableCell>
-                  <TableCell>0.6107 / 0.3280 / 0.4268</TableCell>
-                  <TableCell>0.2778</TableCell>
-                </TableRow>
+  <TableBody>
+    <TableRow>
+      <TableCell>Zero-shot (Llama-3.2-1B-Instruct)</TableCell>
+      <TableCell>3300</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+    </TableRow>
 
-                <TableRow>
-                  <TableCell>Few-shot (Llama-3.2-1B-Instruct - untrained)</TableCell>
-                  <TableCell>3600</TableCell>
-                  <TableCell>0.5553</TableCell>
-                  <TableCell>0.5311 / 0.8581 / 0.6561</TableCell>
-                  <TableCell>0.6481 / 0.2565 / 0.3675</TableCell>
-                  <TableCell>0.8558</TableCell>
-                </TableRow>
+    <TableRow>
+      <TableCell>Few-shot (Llama-3.2-1B)</TableCell>
+      <TableCell>3600</TableCell>
+      <TableCell>0.5553</TableCell>
+      <TableCell>0.6367</TableCell>
+      <TableCell>0.4268</TableCell>
+      <TableCell>0.2778</TableCell>
+    </TableRow>
 
-                <TableRow>
-                  <TableCell>Few-shot (aya-expanse-8b - untrained)</TableCell>
-                  <TableCell>3600</TableCell>
-                  <TableCell>0.5544</TableCell>
-                  <TableCell>0.5311 / 0.8581 / 0.6561</TableCell>
-                  <TableCell>0.6481 / 0.2565 / 0.3675</TableCell>
-                  <TableCell>0.8558</TableCell>
-                </TableRow>
+    <TableRow>
+      <TableCell>Few-shot (aya-expanse-8b)</TableCell>
+      <TableCell>3600</TableCell>
+      <TableCell>0.5544</TableCell>
+      <TableCell>0.6561</TableCell>
+      <TableCell>0.3675</TableCell>
+      <TableCell>0.8558</TableCell>
+    </TableRow>
 
-                <TableRow>
-                  <TableCell>SFT LoRA (Binary head, Llama-3.2-1B, 14k)</TableCell>
-                  <TableCell>3300</TableCell>
-                  <TableCell>0.5912</TableCell>
-                  <TableCell>0.6986 / 0.3384 / 0.4559</TableCell>
-                  <TableCell>0.5907 / 0.8465 / 0.6959</TableCell>
-                  <TableCell>0.7272</TableCell>
-                </TableRow>
-              </TableBody>
+    <TableRow>
+      <TableCell>SFT LoRA (Binary head, 14k)</TableCell>
+      <TableCell>3300</TableCell>
+      <TableCell>0.5912</TableCell>
+      <TableCell>0.4559</TableCell>
+      <TableCell>0.6959</TableCell>
+      <TableCell>0.7272</TableCell>
+    </TableRow>
+  </TableBody>
 
-              <TableCaption>Binary safety classification evaluation.</TableCaption>
-            </Table>
+  <TableCaption>Binary safety classification evaluation.</TableCaption>
+</Table>
           </Card>
         </TabsContent>
 
@@ -107,26 +107,26 @@ const Ablation = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>Zero-shot Llama-3.2-1B</TableCell>
-                  <TableCell>7</TableCell>
-                  <TableCell>41.3%</TableCell>
-                  <TableCell>0.38</TableCell>
-                  <TableCell>0.29</TableCell>
+                  <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>Few-shot Llama-3.2-1B</TableCell>
-                  <TableCell>7</TableCell>
-                  <TableCell>46.7%</TableCell>
-                  <TableCell>0.44</TableCell>
-                  <TableCell>0.81</TableCell>
+                  <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>SFT LoRA (Multiclass head)</TableCell>
-                  <TableCell>7</TableCell>
-                  <TableCell>52.1%</TableCell>
-                  <TableCell>0.51</TableCell>
-                  <TableCell>0.75</TableCell>
+                  <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
                 </TableRow>
               </TableBody>
 
