@@ -1,59 +1,56 @@
-import { NavLink } from "@/components/NavLink";
+import { NavLink } from "react-router-dom";
 import { Shield } from "lucide-react";
 
 const Navigation = () => {
+  const baseClass =
+    "text-muted-foreground hover:text-foreground transition-colors";
+  const activeClass = "text-primary font-semibold";
+
   return (
     <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <NavLink to="/" className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors">
+
+          <NavLink
+            to="/"
+            className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors"
+          >
             <Shield className="w-6 h-6 text-primary" />
             <span>SafeText AI</span>
           </NavLink>
-          
+
           <div className="flex items-center gap-6">
-            <NavLink 
-              to="/" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              activeClassName="text-primary font-medium"
-            >
+
+            <NavLink to="/" className={({ isActive }) =>
+              isActive ? activeClass : baseClass}>
               Home
             </NavLink>
-            <NavLink 
-              to="/api"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              activeClassName="text-primary font-medium"
-            >
+
+            <NavLink to="/api" className={({ isActive }) =>
+              isActive ? activeClass : baseClass}>
               API
             </NavLink>
-            <NavLink 
-              to="/datasets"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              activeClassName="text-primary font-medium"
-            >
+
+            <NavLink to="/datasets" className={({ isActive }) =>
+              isActive ? activeClass : baseClass}>
               Datasets
             </NavLink>
-            <NavLink 
-              to="/experiments"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              activeClassName="text-primary font-medium"
-            >
+
+            <NavLink to="/experiments" className={({ isActive }) =>
+              isActive ? activeClass : baseClass}>
               Experiments
             </NavLink>
-            <NavLink 
-              to="/team" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              activeClassName="text-primary font-medium"
-            >
+
+            <NavLink to="/team" className={({ isActive }) =>
+              isActive ? activeClass : baseClass}>
               Team
             </NavLink>
-            <NavLink 
-              to="/contact" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              activeClassName="text-primary font-medium"
-            >
+
+            <NavLink to="/contact" className={({ isActive }) =>
+              isActive ? activeClass : baseClass}>
               Contact
             </NavLink>
+
           </div>
         </div>
       </div>

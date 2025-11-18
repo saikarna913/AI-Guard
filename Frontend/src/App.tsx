@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
+
 import Index from "./pages/Index";
 import Usage from "./pages/Usage";
 import API from "./pages/API";
@@ -20,10 +21,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-    {/* Use Vite's BASE_URL so the router works correctly when served from a subpath
-      (e.g. GitHub Pages project site at /AI-Guard/). import.meta.env.BASE_URL
-      is set from `base` in vite.config.ts. */}
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+
+      {/* HashRouter ALWAYS works on GitHub Pages */}
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/usage" element={<Usage />} />
@@ -33,10 +33,10 @@ const App = () => (
           <Route path="/team" element={<Team />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
+
     </TooltipProvider>
   </QueryClientProvider>
 );
