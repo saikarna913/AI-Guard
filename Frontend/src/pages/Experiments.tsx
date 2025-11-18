@@ -6,15 +6,14 @@ import AblationTable from "./Ablation";
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar} from 'recharts';
 
 // Helper function to format data for radar chart
-const getRadarData = () => {
-  return metrics.map(metric => ({
-    subject: metric.language,
-    A: metric.successRate,        // Success Rate
-    B: metric.mAP * 100,          // mAP (scaled for better visualization)
-    C: Math.min(metric.klDivergence, 100), // KL Divergence (capped for radar)
-    fullMark: 100
-  }));
-};
+{/*const getRadarData = () => [
+  { subject: 'Success Rate', A: 100, B: 59, C: 19, D: 68 },
+  { subject: 'mAP Score', A: 100, B: 59, C: 19, D: 68 },
+  { subject: 'KL Divergence', A: 100, B: 59, C: 19, D: 68 },
+  { subject: 'Top-1 Recall', A: 100, B: 59, C: 19, D: 32 },
+  { subject: 'Top-3 Recall', A: 100, B: 59, C: 19, D: 68 },
+  { subject: 'Exact Match', A: 100, B: 59, C: 19, D: 13 }
+];
 
 // Helper function to find best performing languages
 const findBestPerformance = (metric) => {
@@ -32,7 +31,7 @@ const findBestPerformance = (metric) => {
       : best.mAP.toFixed(4);
     return `${best.language} (${value})`;
   }
-};
+};*/}
 
 const metrics = [
   {
@@ -149,142 +148,7 @@ const Experiments = () => {
 
           <AblationTable />
 
-          <Card className="p-6">
-  <h2 className="text-2xl font-semibold mb-4">Binary Classification Evaluation Results</h2>
-  
-  {/* Key Metrics Overview */}
-  <div className="grid grid-cols-4 gap-4 mb-6">
-    <Card className="p-4 bg-blue-50 border-blue-200">
-      <div className="text-sm font-medium text-blue-800 mb-2">Accuracy</div>
-      <div className="text-2xl font-bold text-blue-900">95.60%</div>
-      <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
-        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '95.6%' }}></div>
-      </div>
-    </Card>
-    <Card className="p-4 bg-green-50 border-green-200">
-      <div className="text-sm font-medium text-green-800 mb-2">Precision (UNSAFE)</div>
-      <div className="text-2xl font-bold text-green-900">96.80%</div>
-      <div className="w-full bg-green-200 rounded-full h-2 mt-2">
-        <div className="bg-green-600 h-2 rounded-full" style={{ width: '96.8%' }}></div>
-      </div>
-    </Card>
-    <Card className="p-4 bg-purple-50 border-purple-200">
-      <div className="text-sm font-medium text-purple-800 mb-2">Recall (UNSAFE)</div>
-      <div className="text-2xl font-bold text-purple-900">95.91%</div>
-      <div className="w-full bg-purple-200 rounded-full h-2 mt-2">
-        <div className="bg-purple-600 h-2 rounded-full" style={{ width: '95.91%' }}></div>
-      </div>
-    </Card>
-    <Card className="p-4 bg-amber-50 border-amber-200">
-      <div className="text-sm font-medium text-amber-800 mb-2">F1 Score</div>
-      <div className="text-2xl font-bold text-amber-900">0.9635</div>
-      <div className="w-full bg-amber-200 rounded-full h-2 mt-2">
-        <div className="bg-amber-600 h-2 rounded-full" style={{ width: '96.35%' }}></div>
-      </div>
-    </Card>
-  </div>
 
-  {/* Confusion Matrix Visualization */}
-  <Card className="p-4 mb-6">
-    <h3 className="text-lg font-semibold mb-4">Confusion Matrix</h3>
-    <div className="grid grid-cols-3 gap-2 text-center">
-      <div className="p-2"></div>
-      <div className="p-2 font-medium">Predicted SAFE</div>
-      <div className="p-2 font-medium">Predicted UNSAFE</div>
-      
-      <div className="p-2 font-medium">Actual SAFE</div>
-      <div className="p-4 bg-green-100 border border-green-300 rounded">
-        <div className="text-xl font-bold text-green-800">10,103</div>
-        <div className="text-sm text-green-600">True Negative</div>
-      </div>
-      <div className="p-4 bg-red-100 border border-red-300 rounded">
-        <div className="text-xl font-bold text-red-800">518</div>
-        <div className="text-sm text-red-600">False Positive</div>
-      </div>
-      
-      <div className="p-2 font-medium">Actual UNSAFE</div>
-      <div className="p-4 bg-red-100 border border-red-300 rounded">
-        <div className="text-xl font-bold text-red-800">669</div>
-        <div className="text-sm text-red-600">False Negative</div>
-      </div>
-      <div className="p-4 bg-green-100 border border-green-300 rounded">
-        <div className="text-xl font-bold text-green-800">15,670</div>
-        <div className="text-sm text-green-600">True Positive</div>
-      </div>
-    </div>
-  </Card>
-
-  {/* Detailed Classification Report */}
-  <Table>
-    <TableHeader>
-      <TableRow>
-        <TableHead>Class</TableHead>
-        <TableHead>Precision</TableHead>
-        <TableHead>Recall</TableHead>
-        <TableHead>F1-Score</TableHead>
-        <TableHead>Support</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      <TableRow>
-        <TableCell className="font-medium">SAFE</TableCell>
-        <TableCell>
-          <div className="flex items-center gap-2">
-            <span>0.9400</span>
-           {/* <div className="w-16 bg-gray-200 rounded-full h-2">
-              <div className="bg-blue-600 h-2 rounded-full" style={{ width: '94%' }}></div>
-            </div>*/}
-          </div>
-        </TableCell>
-        <TableCell>
-          <div className="flex items-center gap-2">
-            <span>0.9500</span>
-           {/* <div className="w-16 bg-gray-200 rounded-full h-2">
-              <div className="bg-green-600 h-2 rounded-full" style={{ width: '95%' }}></div>
-            </div>*/}
-          </div>
-        </TableCell>
-        <TableCell>0.9400</TableCell>
-        <TableCell>10,621</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell className="font-medium">UNSAFE</TableCell>
-        <TableCell>
-          <div className="flex items-center gap-2">
-            <span>0.9680</span>
-            {/*<div className="w-16 bg-gray-200 rounded-full h-2">
-              <div className="bg-blue-600 h-2 rounded-full" style={{ width: '96.8%' }}></div>
-            </div>*/}
-          </div>
-        </TableCell>
-        <TableCell>
-          <div className="flex items-center gap-2">
-            <span>0.9591</span>
-           {/* <div className="w-16 bg-gray-200 rounded-full h-2">
-              <div className="bg-green-600 h-2 rounded-full" style={{ width: '95.91%' }}></div>
-            </div>*/}
-          </div>
-        </TableCell>
-        <TableCell>0.9635</TableCell>
-        <TableCell>16,339</TableCell>
-      </TableRow>
-    </TableBody>
-    <TableCaption>Binary classification performance metrics (LoRA fine-tuned adapter)</TableCaption>
-  </Table>
-
-  {/* Additional Metrics */}
-  <div className="grid grid-cols-2 gap-4 mt-6">
-    <Card className="p-4 bg-gray-50 border-gray-200">
-      <div className="text-sm font-medium text-gray-800 mb-2">Cohen's Kappa</div>
-      <div className="text-xl font-bold text-gray-900">0.9080</div>
-      <div className="text-xs text-gray-600 mt-1">Excellent agreement (&gt;0.8)</div>
-    </Card>
-    <Card className="p-4 bg-gray-50 border-gray-200">
-      <div className="text-sm font-medium text-gray-800 mb-2">Matthews Correlation Coefficient</div>
-      <div className="text-xl font-bold text-gray-900">0.9081</div>
-      <div className="text-xs text-gray-600 mt-1">Strong positive correlation</div>
-    </Card>
-  </div>
 
   {/* Warning about unknown outputs */}
  {/*} <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
@@ -292,38 +156,62 @@ const Experiments = () => {
       <span className="font-medium">Note:</span> 464 inputs resulted in UNKNOWN outputs and were excluded from evaluation.
     </div>
   </div>*/}
-</Card>
 
-<Card className="p-6">
-  <h2 className="text-2xl font-semibold mb-4">Multi-classifier Evaluation Metrics</h2>
+{/*<Card className="p-6">
+  <h2 className="text-2xl font-semibold mb-4">Multi-classifier Evaluation Metrics</h2>*/}
   
-  {/* Metric Overview Cards - Keep these as they provide quick summary */}
-  <div className="grid grid-cols-3 gap-4 mb-6">
+  {/* Metric Overview Cards - Updated with new data */}
+  {/*<div className="grid grid-cols-3 gap-4 mb-6">
     <Card className="p-4 bg-blue-50 border-blue-200">
-      <div className="text-sm font-medium text-blue-800 mb-2">Avg Success Rate</div>
-      <div className="text-2xl font-bold text-blue-900">95.60%</div>
+      <div className="text-sm font-medium text-blue-800 mb-2">Success Rate</div>
+      <div className="text-2xl font-bold text-blue-900">100.00%</div>
       <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
-        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '95.6%' }}></div>
+        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '100%' }}></div>
       </div>
     </Card>
     <Card className="p-4 bg-green-50 border-green-200">
-      <div className="text-sm font-medium text-green-800 mb-2">Avg mAP</div>
-      <div className="text-2xl font-bold text-green-900">0.1406</div>
+      <div className="text-sm font-medium text-green-800 mb-2">Mean mAP</div>
+      <div className="text-2xl font-bold text-green-900">0.5900</div>
       <div className="w-full bg-green-200 rounded-full h-2 mt-2">
-        <div className="bg-green-600 h-2 rounded-full" style={{ width: '14.06%' }}></div>
+        <div className="bg-green-600 h-2 rounded-full" style={{ width: '59.00%' }}></div>
       </div>
     </Card>
     <Card className="p-4 bg-amber-50 border-amber-200">
-      <div className="text-sm font-medium text-amber-800 mb-2">Avg KL Divergence</div>
-      <div className="text-2xl font-bold text-amber-900">19.1982</div>
+      <div className="text-sm font-medium text-amber-800 mb-2">Mean KL Divergence</div>
+      <div className="text-2xl font-bold text-amber-900">4.7587</div>
       <div className="w-full bg-amber-200 rounded-full h-2 mt-2">
-        <div className="bg-amber-600 h-2 rounded-full" style={{ width: '76.8%' }}></div>
+        <div className="bg-amber-600 h-2 rounded-full" style={{ width: '19.03%' }}></div>
       </div>
     </Card>
-  </div>
+  </div>*/}
+
+  {/* Additional Metric Cards */}
+  {/*<div className="grid grid-cols-3 gap-4 mb-6">
+    <Card className="p-4 bg-purple-50 border-purple-200">
+      <div className="text-sm font-medium text-purple-800 mb-2">Top-1 Recall</div>
+      <div className="text-2xl font-bold text-purple-900">32.08%</div>
+      <div className="w-full bg-purple-200 rounded-full h-2 mt-2">
+        <div className="bg-purple-600 h-2 rounded-full" style={{ width: '32.08%' }}></div>
+      </div>
+    </Card>
+    <Card className="p-4 bg-red-50 border-red-200">
+      <div className="text-sm font-medium text-red-800 mb-2">Top-3 Recall</div>
+      <div className="text-2xl font-bold text-red-900">68.25%</div>
+      <div className="w-full bg-red-200 rounded-full h-2 mt-2">
+        <div className="bg-red-600 h-2 rounded-full" style={{ width: '68.25%' }}></div>
+      </div>
+    </Card>
+    <Card className="p-4 bg-indigo-50 border-indigo-200">
+      <div className="text-sm font-medium text-indigo-800 mb-2">Exact Match</div>
+      <div className="text-2xl font-bold text-indigo-900">13.00%</div>
+      <div className="w-full bg-indigo-200 rounded-full h-2 mt-2">
+        <div className="bg-indigo-600 h-2 rounded-full" style={{ width: '13.00%' }}></div>
+      </div>
+    </Card>
+  </div>*/}
 
   {/* Radar Chart Container */}
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+  {/*<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <Card className="p-4">
       <h3 className="text-lg font-semibold mb-4 text-center">Performance Radar Chart</h3>
       <div className="h-80">
@@ -353,6 +241,13 @@ const Experiments = () => {
               fill="#f59e0b" 
               fillOpacity={0.6} 
             />
+            <Radar 
+              name="Top-3 Recall" 
+              dataKey="D" 
+              stroke="#ef4444" 
+              fill="#ef4444" 
+              fillOpacity={0.6} 
+            />
             <Legend />
             <Tooltip formatter={(value) => [Number(value).toFixed(2), '']} />
           </RadarChart>
@@ -361,21 +256,31 @@ const Experiments = () => {
     </Card>
 
     {/* Side-by-side comparison table */}
-    <Card className="p-4">
-      <h3 className="text-lg font-semibold mb-4 text-center">Detailed Metrics</h3>
+    {/*<Card className="p-4">
+      <h3 className="text-lg font-semibold mb-4 text-center">Language-wise Metrics</h3>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Language</TableHead>
+            <TableHead>Samples</TableHead>
             <TableHead>Success Rate</TableHead>
             <TableHead>mAP</TableHead>
             <TableHead>KL Div</TableHead>
+            <TableHead>Top-1 Recall</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {metrics.map((metric) => (
+          {[
+            { language: 'Overall', samples: 100, successRate: 100.00, mAP: 0.5900, klDivergence: 4.7587, top1Recall: 0.3208 },
+            { language: 'bn', samples: 29, successRate: 100.00, mAP: 0.5986, klDivergence: 4.3528, top1Recall: 0.3764 },
+            { language: 'kn', samples: 24, successRate: 100.00, mAP: 0.5684, klDivergence: 5.0906, top1Recall: 0.2847 },
+            { language: 'ml', samples: 25, successRate: 100.00, mAP: 0.5964, klDivergence: 4.8549, top1Recall: 0.3067 },
+            { language: 'ne', samples: 4, successRate: 100.00, mAP: 0.6066, klDivergence: 5.2131, top1Recall: 0.5000 },
+            { language: 'unknown', samples: 18, successRate: 100.00, mAP: 0.5924, klDivergence: 4.7357, top1Recall: 0.2593 }
+          ].map((metric) => (
             <TableRow key={metric.language}>
               <TableCell className="font-medium">{metric.language}</TableCell>
+              <TableCell>{metric.samples}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <span>{metric.successRate.toFixed(1)}%</span>
@@ -400,11 +305,22 @@ const Experiments = () => {
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <span>{metric.klDivergence.toFixed(1)}</span>
+                  <span>{metric.klDivergence.toFixed(4)}</span>
                   <div className="w-12 bg-gray-200 rounded-full h-2">
                     <div 
                       className="bg-amber-600 h-2 rounded-full" 
-                      style={{ width: `${Math.min(metric.klDivergence / 25 * 100, 100)}%` }}
+                      style={{ width: `${(metric.klDivergence / 6) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <span>{(metric.top1Recall * 100).toFixed(1)}%</span>
+                  <div className="w-12 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-purple-600 h-2 rounded-full" 
+                      style={{ width: `${metric.top1Recall * 100}%` }}
                     ></div>
                   </div>
                 </div>
@@ -413,89 +329,40 @@ const Experiments = () => {
           ))}
         </TableBody>
       </Table>
-    </Card>
-  </div>
+    </Card>*/}
+ {/* </div>*/}
 
   {/* Performance Summary */}
-  <Card className="p-4 bg-gray-50">
+  {/*<Card className="p-4 bg-gray-50">
     <h3 className="text-lg font-semibold mb-3">Performance Insights</h3>
-    <div className="grid grid-cols-3 gap-4 text-sm">
+    <div className="grid grid-cols-4 gap-4 text-sm">
       <div>
         <div className="font-medium text-blue-700">Best Success Rate</div>
-        <div className="text-xl font-bold">{findBestPerformance('successRate')}</div>
+        <div className="text-xl font-bold">All languages: 100%</div>
       </div>
       <div>
         <div className="font-medium text-green-700">Best mAP</div>
-        <div className="text-xl font-bold">{findBestPerformance('mAP')}</div>
+        <div className="text-xl font-bold">ne: 0.6066</div>
       </div>
       <div>
         <div className="font-medium text-amber-700">Lowest KL Divergence</div>
-        <div className="text-xl font-bold">{findBestPerformance('klDivergence')}</div>
+        <div className="text-xl font-bold">bn: 4.3528</div>
+      </div>
+      <div>
+        <div className="font-medium text-purple-700">Best Top-1 Recall</div>
+        <div className="text-xl font-bold">ne: 50.0%</div>
       </div>
     </div>
+    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+      <p className="text-sm text-yellow-800">
+        <strong>Key Observation:</strong> The model achieves perfect success rate (100%) across all languages with strong mAP scores (~0.59) and low KL divergence (~4.76). 
+        Top-3 recall is significantly higher (68.25%) than Top-1 recall (32.08%), suggesting the model is better at ranking relevant classes in top positions.
+      </p>
+    </div>
   </Card>
-</Card>
-
-{/*<Card className="p-6">
-  <h2 className="text-2xl font-semibold mb-4">Evaluation Metrics Comparison</h2>*/}
-  
-  {/* Metric Overview Cards */}
-  {/*<div className="grid grid-cols-3 gap-4 mb-6">
-    <Card className="p-4 bg-blue-50 border-blue-200">
-      <div className="text-sm font-medium text-blue-800 mb-2">Avg Success Rate</div>
-      <div className="text-2xl font-bold text-blue-900">95.60%</div>
-      <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
-        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '95.6%' }}></div>
-      </div>
-    </Card>
-    <Card className="p-4 bg-green-50 border-green-200">
-      <div className="text-sm font-medium text-green-800 mb-2">Avg mAP</div>
-      <div className="text-2xl font-bold text-green-900">0.1406</div>
-      <div className="w-full bg-green-200 rounded-full h-2 mt-2">
-        <div className="bg-green-600 h-2 rounded-full" style={{ width: '14.06%' }}></div>
-      </div>
-    </Card>
-    <Card className="p-4 bg-amber-50 border-amber-200">
-      <div className="text-sm font-medium text-amber-800 mb-2">Avg KL Divergence</div>
-      <div className="text-2xl font-bold text-amber-900">19.1982</div>
-      <div className="w-full bg-amber-200 rounded-full h-2 mt-2">
-        <div className="bg-amber-600 h-2 rounded-full" style={{ width: '76.8%' }}></div>
-      </div>
-    </Card>
-  </div>
-
-  <Table>
-    <TableHeader>
-      <TableRow>
-        <TableHead>Language</TableHead>
-        <TableHead>Success Rate (%)</TableHead>
-        <TableHead>mAP</TableHead>
-        <TableHead>KL Divergence</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      {metrics.map((metric) => (
-        <TableRow key={metric.language}>
-          <TableCell className="font-medium">{metric.language}</TableCell>
-          <TableCell>
-            <div className="flex items-center gap-2">
-              <span>{metric.successRate.toFixed(2)}</span>
-              <div className="w-16 bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-blue-600 h-2 rounded-full" 
-                  style={{ width: `${metric.successRate}%` }}
-                ></div>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell>{metric.mAP.toFixed(4)}</TableCell>
-          <TableCell>{metric.klDivergence.toFixed(4)}</TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-    <TableCaption>Multi-classifier head evaluation metrics across languages</TableCaption>
-  </Table>
 </Card>*/}
+
+
 
           <Card className="p-6">
   <h2 className="text-2xl font-semibold mb-4">Key Findings</h2>

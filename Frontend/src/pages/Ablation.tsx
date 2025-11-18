@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -9,7 +9,54 @@ import {
   TableCaption
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, CartesianGrid, RadialBarChart, RadialBar} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import MetricsMulticlass from './MetricsMulticlass';
+import { BinaryMetrics } from "./BinaryMetrics";
 
+/* --- Small Metric Components Used Above --- */
+
+function MetricBar({ label, value, text, color }) {
+  return (
+    <div>
+      <div className="flex justify-between text-sm mb-1">
+        <span>{label}</span>
+        <span className="font-medium">{text || `${value.toFixed(1)}%`}</span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className={`${color} h-2 rounded-full`} style={{ width: `${value}%` }}></div>
+      </div>
+    </div>
+  );
+}
+
+function MetricCell({ value, color }) {
+  return (
+    <TableCell>
+      <div className="flex items-center gap-2">
+        <span>{value.toFixed(2)}</span>
+        <div className="w-16 bg-gray-200 rounded-full h-2">
+          <div className={`${color} h-2 rounded-full`} style={{ width: `${value * 100}%` }}></div>
+        </div>
+      </div>
+    </TableCell>
+  );
+}
+
+function MetricCellWide({ value, color, text, isPercent }) {
+  return (
+    <TableCell>
+      <div className="flex items-center gap-2">
+        <span>{text || `${value.toFixed(1)}${isPercent ? "%" : ""}`}</span>
+        <div className="w-12 bg-gray-200 rounded-full h-2">
+          <div className={`${color} h-2 rounded-full`} style={{ width: `${value}%` }}></div>
+        </div>
+      </div>
+    </TableCell>
+  );
+}
 const Ablation = () => {
   return (
     <Card className="p-6 space-y-6">
@@ -84,6 +131,15 @@ const Ablation = () => {
   <TableCaption>Binary safety classification evaluation.</TableCaption>
 </Table>
           </Card>
+{/*---------------------------------------------------------------------------------
+                         Bianry Metrics Details
+---------------------------------------------------------------------------------*/}
+
+
+<BinaryMetrics />
+
+
+
         </TabsContent>
 
         {/* ------------------ MULTICLASS TAB ------------------ */}
@@ -133,6 +189,13 @@ const Ablation = () => {
               <TableCaption>Multiclass classification performance.</TableCaption>
             </Table>
           </Card>
+{/* ----------------------------------------------------------------------------------
+                                  Multiclass Metrics Details
+--------------------------------------------------------------------------------------
+ */}
+
+ <MetricsMulticlass />
+
         </TabsContent>
 
       </Tabs>

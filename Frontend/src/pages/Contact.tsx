@@ -124,8 +124,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-1">Email</h3>
-                  <p className="text-muted-foreground">contact@safetextai.com</p>
-                  <p className="text-muted-foreground">support@safetextai.com</p>
+                  <p className="text-muted-foreground">24110185@iitgn.ac.in</p>
+                  <p className="text-muted-foreground">pranjal.goyal@iitgn.ac.in</p>
                 </div>
               </div>
             </Card>

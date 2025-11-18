@@ -34,7 +34,7 @@ const Team = () => {
       college: "Indian Institute of Technology Gandhinagar",
       year: "Student",
       course: "Computer Science & Engineering",
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Laxmidhar",
+      image: "./Laxmi.jpg",
       socials: {
         linkedin: "https://www.linkedin.com/in/laxmidhar-panda-172993203/",
         github: "https://github.com/....",
@@ -58,7 +58,7 @@ const Team = () => {
       college: "Indian Institute of Technology Gandhinagar",
       year: "Student",
       course: "Dual Major in Computer Science & Chemical Engineering",
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Karna",
+      image: "./pardhu.jpg",
       socials: {
         linkedin: "https://www.linkedin.com/in/pardheev-sai-karna-a47906223/",
         github: "https://github.com/....",
@@ -112,10 +112,10 @@ const Team = () => {
             <Card className="p-6">
               <div className="flex gap-6 items-center">
                 <img
-                  src={ta.image}
-                  alt={ta.name}
-                  className="w-28 h-28 rounded-full border-2 border-primary/20 shadow-md"
-                />
+  src={ta.image}
+  alt={ta.name}
+  className="w-28 h-28 rounded-full border-2 border-primary/20 shadow object-cover"
+/>
                 <div>
                   <h2 className="text-2xl font-bold">{ta.name}</h2>
                   <p className="text-sm text-primary font-medium">{ta.title}</p>
@@ -136,10 +136,10 @@ const Team = () => {
               <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
                 <div className="flex flex-col items-center text-center gap-4">
                   <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-28 h-28 rounded-full border-2 border-primary/20 shadow"
-                  />
+  src={member.image}
+  alt={member.name}
+  className="w-28 h-28 rounded-full border-2 border-primary/20 shadow object-cover"
+/>
                   <h3 className="text-xl font-semibold">{member.name}</h3>
                   <p className="text-sm text-primary font-medium">{member.course}</p>
                   <p className="text-sm text-muted-foreground">{member.college}</p>

@@ -7,7 +7,7 @@ export const instructor = {
   ],
   email: "singh.mayank -AT- iitgn.ac.in",
   website: "http://mayank4490.github.io/",
-  image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mayank",
+  image: "./mayank.jpeg",
 };
 
 export const ta = {
@@ -17,5 +17,5 @@ export const ta = {
   socials: {
     linkedin: "https://www.linkedin.com/in/himanshubeniwal/",
   },
-  image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Himanshu",
+  image: "./himanshu.jpeg",
 };
