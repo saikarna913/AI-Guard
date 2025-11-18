@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import AblationTable from "./Ablation";
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar} from 'recharts';
 
 // Helper function to format data for radar chart
 const getRadarData = () => {
@@ -295,10 +295,152 @@ const Experiments = () => {
 </Card>
 
 <Card className="p-6">
-  <h2 className="text-2xl font-semibold mb-4">Evaluation Metrics Comparison</h2>
+  <h2 className="text-2xl font-semibold mb-4">Multi-classifier Evaluation Metrics</h2>
+  
+  {/* Metric Overview Cards - Keep these as they provide quick summary */}
+  <div className="grid grid-cols-3 gap-4 mb-6">
+    <Card className="p-4 bg-blue-50 border-blue-200">
+      <div className="text-sm font-medium text-blue-800 mb-2">Avg Success Rate</div>
+      <div className="text-2xl font-bold text-blue-900">95.60%</div>
+      <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
+        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '95.6%' }}></div>
+      </div>
+    </Card>
+    <Card className="p-4 bg-green-50 border-green-200">
+      <div className="text-sm font-medium text-green-800 mb-2">Avg mAP</div>
+      <div className="text-2xl font-bold text-green-900">0.1406</div>
+      <div className="w-full bg-green-200 rounded-full h-2 mt-2">
+        <div className="bg-green-600 h-2 rounded-full" style={{ width: '14.06%' }}></div>
+      </div>
+    </Card>
+    <Card className="p-4 bg-amber-50 border-amber-200">
+      <div className="text-sm font-medium text-amber-800 mb-2">Avg KL Divergence</div>
+      <div className="text-2xl font-bold text-amber-900">19.1982</div>
+      <div className="w-full bg-amber-200 rounded-full h-2 mt-2">
+        <div className="bg-amber-600 h-2 rounded-full" style={{ width: '76.8%' }}></div>
+      </div>
+    </Card>
+  </div>
+
+  {/* Radar Chart Container */}
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <Card className="p-4">
+      <h3 className="text-lg font-semibold mb-4 text-center">Performance Radar Chart</h3>
+      <div className="h-80">
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={getRadarData()}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="subject" />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} />
+            <Radar 
+              name="Success Rate" 
+              dataKey="A" 
+              stroke="#3b82f6" 
+              fill="#3b82f6" 
+              fillOpacity={0.6} 
+            />
+            <Radar 
+              name="mAP Score" 
+              dataKey="B" 
+              stroke="#10b981" 
+              fill="#10b981" 
+              fillOpacity={0.6} 
+            />
+            <Radar 
+              name="KL Divergence" 
+              dataKey="C" 
+              stroke="#f59e0b" 
+              fill="#f59e0b" 
+              fillOpacity={0.6} 
+            />
+            <Legend />
+            <Tooltip formatter={(value) => [Number(value).toFixed(2), '']} />
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+
+    {/* Side-by-side comparison table */}
+    <Card className="p-4">
+      <h3 className="text-lg font-semibold mb-4 text-center">Detailed Metrics</h3>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Language</TableHead>
+            <TableHead>Success Rate</TableHead>
+            <TableHead>mAP</TableHead>
+            <TableHead>KL Div</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {metrics.map((metric) => (
+            <TableRow key={metric.language}>
+              <TableCell className="font-medium">{metric.language}</TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <span>{metric.successRate.toFixed(1)}%</span>
+                  <div className="w-12 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full" 
+                      style={{ width: `${metric.successRate}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <span>{metric.mAP.toFixed(4)}</span>
+                  <div className="w-12 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-green-600 h-2 rounded-full" 
+                      style={{ width: `${metric.mAP * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <span>{metric.klDivergence.toFixed(1)}</span>
+                  <div className="w-12 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-amber-600 h-2 rounded-full" 
+                      style={{ width: `${Math.min(metric.klDivergence / 25 * 100, 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Card>
+  </div>
+
+  {/* Performance Summary */}
+  <Card className="p-4 bg-gray-50">
+    <h3 className="text-lg font-semibold mb-3">Performance Insights</h3>
+    <div className="grid grid-cols-3 gap-4 text-sm">
+      <div>
+        <div className="font-medium text-blue-700">Best Success Rate</div>
+        <div className="text-xl font-bold">{findBestPerformance('successRate')}</div>
+      </div>
+      <div>
+        <div className="font-medium text-green-700">Best mAP</div>
+        <div className="text-xl font-bold">{findBestPerformance('mAP')}</div>
+      </div>
+      <div>
+        <div className="font-medium text-amber-700">Lowest KL Divergence</div>
+        <div className="text-xl font-bold">{findBestPerformance('klDivergence')}</div>
+      </div>
+    </div>
+  </Card>
+</Card>
+
+{/*<Card className="p-6">
+  <h2 className="text-2xl font-semibold mb-4">Evaluation Metrics Comparison</h2>*/}
   
   {/* Metric Overview Cards */}
-  <div className="grid grid-cols-3 gap-4 mb-6">
+  {/*<div className="grid grid-cols-3 gap-4 mb-6">
     <Card className="p-4 bg-blue-50 border-blue-200">
       <div className="text-sm font-medium text-blue-800 mb-2">Avg Success Rate</div>
       <div className="text-2xl font-bold text-blue-900">95.60%</div>
@@ -353,7 +495,7 @@ const Experiments = () => {
     </TableBody>
     <TableCaption>Multi-classifier head evaluation metrics across languages</TableCaption>
   </Table>
-</Card>
+</Card>*/}
 
           <Card className="p-6">
   <h2 className="text-2xl font-semibold mb-4">Key Findings</h2>
