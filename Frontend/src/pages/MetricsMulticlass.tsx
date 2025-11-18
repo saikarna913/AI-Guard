@@ -1,4 +1,6 @@
-// Types
+import React, { useState } from 'react';
+
+// --- Types ---
 interface ClassificationMetric {
   class: string;
   precision: number;
@@ -19,336 +21,279 @@ interface OverallMetrics {
   accuracy: number;
 }
 
-interface ConfusionMatrix {
-  labels: string[];
-  values: number[];
-}
-
 interface LanguageMetric {
   lang: string;
   samples: number;
   mAP: number;
   top1Recall: number;
   accuracy: number;
+  klDivergence: number; // Added based on your data
 }
 
 interface ReportData {
   overall: OverallMetrics;
   classificationReport: ClassificationMetric[];
-  confusionMatrix: ConfusionMatrix;
   languages: LanguageMetric[];
 }
 
-// Hardcoded data
+// --- Hardcoded Data (Updated from your text dump) ---
 const reportData: ReportData = {
   overall: {
     samples: 100,
     successRate: 100.0,
     klDivergence: 4.7587,
-    mAP: 0.59,
+    mAP: 0.5900,
     top1Recall: 0.3208,
     top3Recall: 0.6825,
-    exactMatch: 0.13,
-    jaccard: 0.815,
+    exactMatch: 0.1300,
+    jaccard: 0.8150,
     accuracy: 0.43,
   },
   classificationReport: [
     { class: 'S1', precision: 0.74, recall: 0.37, f1: 0.49, support: 54 },
-    { class: 'S2', precision: 0.2, recall: 0.15, f1: 0.17, support: 13 },
-    { class: 'S3', precision: 0.29, recall: 1.0, f1: 0.44, support: 2 },
-    { class: 'S4', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S5', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S6', precision: 0.0, recall: 0.0, f1: 0.0, support: 1 },
-    { class: 'S7', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S8', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S9', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
+    { class: 'S2', precision: 0.20, recall: 0.15, f1: 0.17, support: 13 },
+    { class: 'S3', precision: 0.29, recall: 1.00, f1: 0.44, support: 2 },
+    { class: 'S4', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S5', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S6', precision: 0.00, recall: 0.00, f1: 0.00, support: 1 },
+    { class: 'S7', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S8', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S9', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
     { class: 'S10', precision: 0.68, recall: 0.61, f1: 0.64, support: 28 },
-    { class: 'S11', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S12', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S13', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S14', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S15', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S16', precision: 0.0, recall: 0.0, f1: 0.0, support: 0 },
-    { class: 'S17', precision: 0.15, recall: 1.0, f1: 0.27, support: 2 },
+    { class: 'S11', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S12', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S13', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S14', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S15', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S16', precision: 0.00, recall: 0.00, f1: 0.00, support: 0 },
+    { class: 'S17', precision: 0.15, recall: 1.00, f1: 0.27, support: 2 },
   ],
-  confusionMatrix: {
-    labels: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17'],
-    values: [
-      20, 8, 3, 2, 0, 6, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7,
-      3, 2, 1, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2,
-      0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      4, 0, 1, 1, 0, 1, 0, 0, 0, 17, 0, 3, 0, 0, 0, 0, 1,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-    ],
-  },
   languages: [
-    { lang: 'bn', samples: 29, mAP: 0.5986, top1Recall: 0.3764, accuracy: 0.45 },
-    { lang: 'kn', samples: 24, mAP: 0.5684, top1Recall: 0.2847, accuracy: 0.38 },
-    { lang: 'ml', samples: 25, mAP: 0.5964, top1Recall: 0.3067, accuracy: 0.40 },
-    { lang: 'or', samples: 22, mAP: 0.595, top1Recall: 0.3031, accuracy: 0.5 },
+    { lang: 'bn', samples: 29, mAP: 0.5986, top1Recall: 0.3764, accuracy: 0.45, klDivergence: 4.3528 },
+    { lang: 'kn', samples: 24, mAP: 0.5684, top1Recall: 0.2847, accuracy: 0.38, klDivergence: 5.0906 },
+    { lang: 'ml', samples: 25, mAP: 0.5964, top1Recall: 0.3067, accuracy: 0.40, klDivergence: 4.8549 },
+    { lang: 'or', samples: 22, mAP: 0.5900, top1Recall: 0.3031, accuracy: 0.50, klDivergence: 4.82 }, // Updated from text
   ],
 };
 
-// Components
-function StatCard({ title, value, positiveIsGood = true, description = "" }: { 
+// --- Helper Components ---
+
+function MetricBar({ value, colorClass = "bg-blue-600" }: { value: number, colorClass?: string }) {
+  return (
+    <div className="flex items-center space-x-2">
+      <span className="w-8 text-xs text-gray-600 text-right">{(value * 100).toFixed(0)}%</span>
+      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div 
+          className={`h-full rounded-full ${colorClass}`} 
+          style={{ width: `${Math.min(Math.max(value, 0), 1) * 100}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ title, value, type = 'neutral', subtext }: { 
   title: string; 
   value: string | number; 
-  positiveIsGood?: boolean; 
-  description?: string; 
+  type?: 'good' | 'bad' | 'warning' | 'neutral';
+  subtext?: string;
 }) {
-  const isGood = title === 'KL-Divergence' ? false : positiveIsGood;
-
-const getValueColor = () => {
-  if (title === 'KL-Divergence') {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value;
-    return numValue < 2 ? 'text-green-600' : numValue < 5 ? 'text-yellow-600' : 'text-red-600';
-  }
-  
-  const numValue = typeof value === 'string' ? parseFloat(value) : value;
-  if (typeof numValue === 'number') {
-    if (numValue >= 0.7) return 'text-green-600';
-    if (numValue >= 0.5) return 'text-yellow-600';
-    return 'text-red-600';
-  }
-  return 'text-gray-700';
-};
-
-  return (
-    <div className="bg-white p-4 rounded-lg border border-gray-200 transition-all hover:shadow-md">
-      <h3 className="text-sm font-medium text-gray-600 mb-1">{title}</h3>
-      <p className={`text-2xl font-bold ${getValueColor()} mb-1`}>{value}</p>
-      {description && <p className="text-xs text-gray-500">{description}</p>}
-    </div>
-  );
-}
-
-function F1BarChart({ data }: { data: ClassificationMetric[] }) {
-  const filteredData = data.filter(item => item.support > 0);
-  
-  return (
-    <div className="bg-white p-4 rounded-lg border border-gray-200">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">F1-Scores by Class</h3>
-      <div className="space-y-3">
-        {filteredData.map((item) => {
-          const percentage = (item.f1 * 100).toFixed(1);
-          const barColor = item.f1 >= 0.6 ? 'bg-green-500' : item.f1 >= 0.4 ? 'bg-yellow-500' : 'bg-red-500';
-
-          return (
-            <div key={item.class} className="group">
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium text-gray-700">{item.class}</span>
-                <span className="text-gray-600">{item.f1.toFixed(3)}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${barColor} transition-all duration-500`}
-                  style={{ width: `${percentage}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>Support: {item.support}</span>
-                <span>{percentage}%</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function ConfusionMatrix({ data }: { data: ConfusionMatrix }) {
-  const { labels, values } = data;
-  const numLabels = labels.length;
-  const maxValue = Math.max(...values);
-  
-  const getCellColor = (val: number, isDiagonal: boolean) => {
-    if (val === 0) return 'bg-gray-100';
-    
-    const intensity = val / maxValue;
-    if (isDiagonal) {
-      if (intensity > 0.7) return 'bg-green-600';
-      if (intensity > 0.4) return 'bg-green-400';
-      return 'bg-green-300';
-    } else {
-      if (intensity > 0.7) return 'bg-red-600';
-      if (intensity > 0.4) return 'bg-red-400';
-      return 'bg-red-300';
-    }
+  const colors = {
+    good: 'text-green-600',
+    bad: 'text-red-600',
+    warning: 'text-yellow-600',
+    neutral: 'text-gray-900'
   };
 
-  const getTextColor = (val: number) => val > maxValue * 0.5 ? 'text-white' : 'text-gray-800';
-
   return (
-    <div className="bg-white p-4 rounded-lg border border-gray-200">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">Confusion Matrix</h3>
-        <div className="flex items-center space-x-3 text-xs">
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-green-400 rounded mr-1" />
-            <span>Correct</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-red-400 rounded mr-1" />
-            <span>Incorrect</span>
-          </div>
-        </div>
+    <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+      <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">{title}</p>
+      <div className="mt-2 flex items-baseline">
+        <span className={`text-2xl font-bold ${colors[type]}`}>{value}</span>
       </div>
-      
-      <div className="overflow-x-auto text-xs">
-        <div className="inline-block">
-          {/* Header */}
-          <div className="grid grid-cols-[40px_repeat(17,20px)] gap-1 mb-1">
-            <div />
-            {labels.map(label => (
-              <div key={label} className="w-5 h-5 flex items-center justify-center font-medium text-gray-700 rotate-45 transform origin-center">
-                {label}
-              </div>
-            ))}
-          </div>
-
-          {/* Matrix */}
-          {labels.map((rowLabel, r) => (
-            <div key={rowLabel} className="grid grid-cols-[40px_repeat(17,20px)] gap-1 mb-1">
-              <div className="w-10 h-5 flex items-center justify-center font-medium text-gray-700 text-xs">
-                {rowLabel}
-              </div>
-              {labels.map((_, c) => {
-                const val = values[r * numLabels + c];
-                const isDiagonal = r === c;
-                const colorClass = getCellColor(val, isDiagonal);
-                const textClass = getTextColor(val);
-
-                return (
-                  <div
-                    key={`${r}-${c}`}
-                    className={`w-5 h-5 flex items-center justify-center rounded-sm ${colorClass} ${textClass} font-medium transition-all hover:scale-110 hover:shadow-sm cursor-help`}
-                    title={`True: ${rowLabel}, Predicted: ${labels[c]}, Count: ${val}`}
-                  >
-                    {val > 0 ? val : ''}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
+      {subtext && <p className="mt-1 text-xs text-gray-400">{subtext}</p>}
     </div>
   );
 }
 
-function LanguagePerformance({ data }: { data: LanguageMetric[] }) {
+// --- NEW COMPONENT: Formal Classification Table ---
+function DetailedClassificationTable({ data }: { data: ClassificationMetric[] }) {
+  // Filter out classes with 0 support to keep the table clean and relevant
+  const activeClasses = data.filter(d => d.support > 0).sort((a, b) => b.support - a.support);
+
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-800">Language Performance</h3>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+        <div>
+            <h3 className="text-lg font-bold text-gray-800">Detailed Classification Report</h3>
+            <p className="text-xs text-gray-500 mt-1">Performance breakdown by class (Sorted by Support)</p>
+        </div>
+        <span className="text-xs font-mono bg-gray-200 text-gray-600 px-2 py-1 rounded">Top-1 Metrics</span>
       </div>
+      
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="w-full text-sm text-left">
+          <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Language</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Samples</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Accuracy</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">mAP</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Top-1 Recall</th>
+              <th className="px-6 py-3 w-24">Class</th>
+              <th className="px-6 py-3 w-24 text-right">Support</th>
+              <th className="px-6 py-3 w-48">Precision</th>
+              <th className="px-6 py-3 w-48">Recall</th>
+              <th className="px-6 py-3 w-48">F1-Score</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((lang, index) => (
-              <tr key={lang.lang} className="hover:bg-gray-50 transition-colors">
-                <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className={`w-2 h-2 rounded-full mr-2 ${
-                      ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500'][index % 4]
-                    }`} />
-                    <span className="text-sm font-medium text-gray-900">{lang.lang.toUpperCase()}</span>
+          <tbody className="divide-y divide-gray-100">
+            {activeClasses.map((row) => (
+              <tr key={row.class} className="hover:bg-gray-50 transition-colors">
+                <td className="px-6 py-3 font-semibold text-gray-700">
+                  {row.class}
+                </td>
+                <td className="px-6 py-3 text-right text-gray-600">
+                  {row.support}
+                </td>
+                <td className="px-6 py-3">
+                  <MetricBar value={row.precision} colorClass="bg-indigo-500" />
+                </td>
+                <td className="px-6 py-3">
+                  <MetricBar value={row.recall} colorClass="bg-purple-500" />
+                </td>
+                <td className="px-6 py-3">
+                  <div className="flex items-center justify-between">
+                    <span className={`font-bold ${(row.f1 < 0.3) ? 'text-red-500' : (row.f1 > 0.7) ? 'text-green-600' : 'text-yellow-600'}`}>
+                        {row.f1.toFixed(2)}
+                    </span>
                   </div>
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{lang.samples}</td>
-                <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-700">
-                  {(lang.accuracy * 100).toFixed(1)}%
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-700">
-                  {lang.mAP.toFixed(3)}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-700">
-                  {(lang.top1Recall * 100).toFixed(1)}%
                 </td>
               </tr>
             ))}
           </tbody>
+          <tfoot className="bg-gray-50 text-gray-500 text-xs border-t border-gray-200">
+            <tr>
+                <td colSpan={5} className="px-6 py-3 text-center">
+                    * Classes with 0 support are hidden for clarity
+                </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
   );
 }
 
-// Main Dashboard Component
-export default function MetricsMulticlass() {
-  const { overall, classificationReport, confusionMatrix, languages } = reportData;
+function LanguageSummary({ languages }: { languages: LanguageMetric[] }) {
+    // Find best performing language based on accuracy
+    const bestLang = [...languages].sort((a, b) => b.accuracy - a.accuracy)[0];
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {languages.map((lang) => {
+                const isBest = lang.lang === bestLang.lang;
+                return (
+                    <div key={lang.lang} className={`relative p-4 rounded-xl border ${isBest ? 'border-green-200 bg-green-50/50' : 'border-gray-200 bg-white'}`}>
+                         {isBest && (
+                            <div className="absolute -top-3 left-4 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full border border-green-200 font-bold">
+                                Top Performer
+                            </div>
+                        )}
+                        <div className="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 className="text-lg font-bold text-gray-800 uppercase">{lang.lang}</h4>
+                                <span className="text-xs text-gray-500">{lang.samples} Samples</span>
+                            </div>
+                            <div className="text-right">
+                                <span className="block text-2xl font-bold text-gray-900">{(lang.accuracy * 100).toFixed(0)}%</span>
+                                <span className="text-[10px] uppercase text-gray-400 tracking-wider">Accuracy</span>
+                            </div>
+                        </div>
+                        
+                        <div className="space-y-2 mt-4">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">mAP</span>
+                                <span className="font-medium text-gray-700">{lang.mAP.toFixed(3)}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">KL-Div</span>
+                                <span className={`font-medium ${lang.klDivergence > 5 ? 'text-red-500' : 'text-gray-700'}`}>
+                                    {lang.klDivergence.toFixed(2)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
+
+// --- Main Dashboard Component ---
+export default function ModelEvaluationDashboard() {
+  const { overall, classificationReport, languages } = reportData;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 font-sans">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto space-y-8">
+        
         {/* Header */}
-        <header className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-200 mb-3">
-            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
+        <header className="flex flex-col md:flex-row md:items-center md:justify-between pb-6 border-b border-gray-200">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Model Evaluation Report</h1>
+            <p className="text-gray-500 mt-1">Analysis run on {overall.samples} samples across {languages.length} languages</p>
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Model Evaluation Dashboard</h1>
-          <p className="text-gray-600">Analysis of {overall.samples} samples across {languages.length} languages</p>
+          <div className="mt-4 md:mt-0 flex items-center space-x-2">
+            <span className={`px-3 py-1 rounded-full text-sm font-medium ${overall.successRate === 100 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+              Success Rate: {overall.successRate}%
+            </span>
+          </div>
         </header>
 
-        {/* KPI Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Key Metrics</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <StatCard title="Accuracy" value={`${(overall.accuracy * 100).toFixed(1)}%`} />
-            <StatCard title="mAP" value={overall.mAP.toFixed(3)} />
-            <StatCard title="Top-1 Recall" value={`${(overall.top1Recall * 100).toFixed(1)}%`} />
-            <StatCard title="Top-3 Recall" value={`${(overall.top3Recall * 100).toFixed(1)}%`} />
-            <StatCard title="Jaccard" value={overall.jaccard.toFixed(3)} />
-            <StatCard title="KL-Divergence" value={overall.klDivergence.toFixed(3)} positiveIsGood={false} />
-            <StatCard title="Exact Match" value={`${(overall.exactMatch * 100).toFixed(1)}%`} />
-            <StatCard title="Success Rate" value={`${overall.successRate.toFixed(1)}%`} />
+        {/* Key Metrics Grid */}
+        <section>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Overall Performance Metrics</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatCard 
+                title="Accuracy" 
+                value={`${(overall.accuracy * 100).toFixed(1)}%`} 
+                type={overall.accuracy < 0.5 ? 'bad' : 'warning'}
+                subtext="Low accuracy indicates high confusion"
+            />
+            <StatCard 
+                title="mAP" 
+                value={overall.mAP.toFixed(3)} 
+                type="neutral"
+                subtext="Mean Average Precision"
+            />
+            <StatCard 
+                title="KL Divergence" 
+                value={overall.klDivergence.toFixed(3)} 
+                type={overall.klDivergence > 4 ? 'bad' : 'good'}
+                subtext="Lower is better"
+            />
+             <StatCard 
+                title="Jaccard Sim" 
+                value={overall.jaccard.toFixed(3)} 
+                type="good"
+                subtext="Set similarity score"
+            />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+             <StatCard title="Exact Match" value={`${(overall.exactMatch * 100).toFixed(1)}%`} type="bad" />
+             <StatCard title="Top-1 Recall" value={`${(overall.top1Recall * 100).toFixed(1)}%`} type="bad" />
+             <StatCard title="Top-3 Recall" value={`${(overall.top3Recall * 100).toFixed(1)}%`} type="good" />
+             <StatCard title="Avg Samples" value={(overall.samples / languages.length).toFixed(0)} subtext="Per language" />
           </div>
         </section>
 
-        {/* Charts Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Performance Analysis</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <F1BarChart data={classificationReport} />
-            <ConfusionMatrix data={confusionMatrix} />
-          </div>
+        {/* Language Breakdown */}
+        <section>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Language Performance</h2>
+            <LanguageSummary languages={languages} />
         </section>
 
-        {/* Language Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Language Performance</h2>
-          <LanguagePerformance data={languages} />
+        {/* Detailed Classification Table (Replaces Confusion Matrix) */}
+        <section>
+          <DetailedClassificationTable data={classificationReport} />
         </section>
 
-        {/* Footer */}
-        <footer className="text-center text-sm text-gray-500 pt-4 border-t border-gray-200">
-          <p>Generated on {new Date().toLocaleDateString()}</p>
-        </footer>
       </div>
-    </div>
+
   );
 }

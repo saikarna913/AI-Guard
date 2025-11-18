@@ -1,3 +1,5 @@
+import emailjs from "emailjs-com";
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
 /*export async function analyzeText(payload: { model: string; language: string; text: string }) {
@@ -134,24 +136,40 @@ export async function classifyText(payload: { model?: string; text: string }) {
   return await res.json();
 }
 
-export async function sendContactEmail(formData: { name: string; email: string; message: string }) {
-  const res = await fetch(`${API_BASE}/api/contact`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
-  });
 
-  if (!res.ok) {
-    const text = await res.text();
-    let message = text;
-    try {
-      const json = JSON.parse(text);
-      message = json.detail || json.error || JSON.stringify(json);
-    } catch (_) {}
-    throw new Error(message || "Failed to send message");
+
+export async function sendContactEmail(formData: {
+  name: string;
+  email: string;
+  message: string;
+  title?: string; // Optional title field
+}) {
+  try {
+    const serviceID = "service_0p4zwpm";
+    const templateID = "template_lfkaquu";
+    const publicKey = "lozWVbg2SnXG98VTP";
+
+    const templateParams = {
+      to_email: "aiguard47@gmail.com",
+      name: formData.name,      // Should map to {{name}} in template
+      email: formData.email,    // Should map to {{email}} in template
+      message: formData.message, // Should map to {{message}} in template
+      time: new Date().toLocaleString(), // Add current time
+      title: formData.title || "New Contact Form Submission" // Add title
+    };
+
+    const result = await emailjs.send(
+      serviceID,
+      templateID,
+      templateParams,
+      publicKey
+    );
+
+    return { success: true, result };
+  } catch (error: any) {
+    throw new Error(error?.text || "Failed to send email");
   }
-
-  return await res.json();
 }
+
 
 export default { analyzeText, classifyText, sendContactEmail };

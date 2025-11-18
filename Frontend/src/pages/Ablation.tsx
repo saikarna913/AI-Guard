@@ -134,9 +134,10 @@ const Ablation = () => {
 {/*---------------------------------------------------------------------------------
                          Bianry Metrics Details
 ---------------------------------------------------------------------------------*/}
-
-
+<Card className="mt-4 ">    
 <BinaryMetrics />
+</Card>
+
 
 
 
@@ -193,8 +194,10 @@ const Ablation = () => {
                                   Multiclass Metrics Details
 --------------------------------------------------------------------------------------
  */}
-
+<Card className="p-6 mb-8 mt-4 border-gray-200 shadow-sm">
  <MetricsMulticlass />
+</Card>
+
 
         </TabsContent>
 
