@@ -59,11 +59,17 @@ export async function analyzeText(payload: { model: string; language: string; te
         score: 1
       };
     }
-
+console.log("Parsing distribution for UNSAFE case...");
     // CASE 2: UNSAFE → parse distribution text
-    const parsedDistribution = parseDistributionString(responseData.multiclass_output);
-
+    const parsedDistribution = responseData.multiclass_output;
+console.log("Parsed distribution:", parsedDistribution);
     const { category, score, probabilities } = calculateResults(parsedDistribution);
+    console.log({
+      distribution: probabilities,
+      category,
+      safety: responseData.result,
+      score
+    });
 
     return {
       distribution: probabilities,
@@ -79,6 +85,7 @@ export async function analyzeText(payload: { model: string; language: string; te
     }
     throw err;
   }
+
 }
 
 // Convert "S1: 0.25, S2: 0.25 ..." → { S1: 0.25, S2: 0.25, ... }

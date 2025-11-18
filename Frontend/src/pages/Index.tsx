@@ -209,116 +209,116 @@ const Index = () => {
           </Card>
 
           {result && (
-            <Card className="p-8 animate-in fade-in-50 duration-500 shadow-lg border-2 border-primary/20">
-              <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-                <CheckCircle className="w-8 h-8 text-primary" aria-label="Check Icon" />
-                Analysis Results
-              </h2>
+  <Card className="p-8 animate-in fade-in-50 duration-500 shadow-lg border-2 border-primary/20">
+    <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
+      <CheckCircle className="w-8 h-8 text-primary" aria-label="Check Icon" />
+      Analysis Results
+    </h2>
 
-              <div className="space-y-6">
-                <div className="flex items-start gap-4 p-4 rounded-lg bg-primary/5">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Shield className="w-6 h-6 text-primary" aria-label="Shield Icon" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-2 text-lg">Category</h3>
-                    <Badge variant="secondary" className="text-lg px-4 py-2">
-                      {result.category}
-                    </Badge>
-                  </div>
-                </div>
+    <div className="space-y-6">
+      <div className="flex items-start gap-4 p-4 rounded-lg bg-primary/5">
+        <div className="p-3 rounded-lg bg-primary/10">
+          <Shield className="w-6 h-6 text-primary" aria-label="Shield Icon" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-semibold mb-2 text-lg">Category</h3>
+          <Badge variant="secondary" className="text-lg px-4 py-2">
+            {result.category}
+          </Badge>
+        </div>
+      </div>
 
-                <div className="flex items-start gap-4 p-4 rounded-lg bg-primary/5">
-                  <div
-                    className={`p-3 rounded-lg ${
-                      result.safety === "safe" ? "bg-green-500/10" : "bg-red-500/10"
-                    }`}
-                  >
-                    {result.safety === "safe" ? (
-                      <CheckCircle className="w-6 h-6 text-green-600" aria-label="Safe Icon" />
-                    ) : (
-                      <AlertCircle className="w-6 h-6 text-red-600" aria-label="Warning Icon" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-2 text-lg">Safety Status</h3>
-                    <Badge
-                      variant={result.safety === "safe" ? "default" : "destructive"}
-                      className="text-lg px-4 py-2"
-                    >
-                      {result.safety.toUpperCase()}
-                    </Badge>
-                  </div>
-                </div>
-
-                {/* Distribution Line */}
-
-<div className="p-4 rounded-lg bg-primary/5">
-  <h3 className="font-semibold mb-4 text-lg">Score Distribution</h3>
-
-  {/* BEAUTIFUL BAR */}
-<TooltipProvider delayDuration={0}>
-  <div className="w-full flex h-5 rounded-xl overflow-hidden shadow-sm border border-primary/10">
-    {Object.entries(result.distribution || {}).map(([key, value], index) => {
-      if (typeof value !== "number" || value <= 0) return null;
-
-      const width = `${value * 100}%`;
-      const color = COLORS[index % COLORS.length];
-      const label = CATEGORY_LABELS[key] || key;
-
-      return (
+      <div className="flex items-start gap-4 p-4 rounded-lg bg-primary/5">
         <div
-          key={key}
-          style={{
-            width,
-            backgroundColor: color,
-            opacity: 0.7,
-            transition: "width 0.4s ease",
-          }}
-          title={`${key}: ${label} — ${(value * 100).toFixed(1)}%`}
-        ></div>
-      );
-    })}
-  </div>
-
-  {/* BADGES */}
-  <div className="flex flex-wrap gap-2 mt-4">
-    {Object.entries(result.distribution || {}).map(([key, value], index) => {
-      if (typeof value !== "number" || value <= 0) return null;
-
-      const color = COLORS[index % COLORS.length];
-      const label = CATEGORY_LABELS[key] || key;
-
-      return (
-        <Badge
-          key={key}
-          className="px-3 py-1 rounded-lg shadow"
-          style={{
-            backgroundColor: color,
-            color: "white",
-          }}
-          title={label}
+          className={`p-3 rounded-lg ${
+            result.safety === "SAFE" ? "bg-green-500/10" : "bg-red-500/10"
+          }`}
         >
-          {key}: {(value * 100).toFixed(1)}%
-        </Badge>
-      );
-    })}
-  </div>
-  </TooltipProvider>
-</div>
-
-
-
-
-                <div className="p-4 bg-muted/50 rounded-lg border border-border">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Model Used:</strong> {model.toUpperCase()} |{" "}
-                    <strong>Language:</strong> {language.charAt(0).toUpperCase() + language.slice(1)}
-                  </p>
-                </div>
-              </div>
-            </Card>
+          {result.safety === "SAFE" ? (
+            <CheckCircle className="w-6 h-6 text-green-600" aria-label="Safe Icon" />
+          ) : (
+            <AlertCircle className="w-6 h-6 text-red-600" aria-label="Warning Icon" />
           )}
+        </div>
+        <div className="flex-1">
+          <h3 className="font-semibold mb-2 text-lg">Safety Status</h3>
+          <Badge
+            variant={result.safety === "SAFE" ? "default" : "destructive"}
+            className={`text-lg px-4 py-2 ${
+              result.safety === "SAFE" 
+                ? "bg-green-500 text-white" 
+                : "bg-red-500 text-white"
+            }`}
+          >
+            {result.safety.toUpperCase()}
+          </Badge>
+        </div>
+      </div>
+
+      {/* Distribution Section - Only show if distribution exists */}
+      {result.distribution && Object.keys(result.distribution).length > 0 && (
+        <div className="p-4 rounded-lg bg-primary/5">
+          <h3 className="font-semibold mb-4 text-lg">Score Distribution</h3>
+
+          <TooltipProvider delayDuration={0}>
+            <div className="w-full flex h-5 rounded-xl overflow-hidden shadow-sm border border-primary/10">
+              {Object.entries(result.distribution).map(([key, value], index) => {
+                if (typeof value !== "number" || value <= 0) return null;
+
+                const width = `${value * 100}%`;
+                const color = COLORS[index % COLORS.length];
+                const label = CATEGORY_LABELS[key] || key;
+
+                return (
+                  <div
+                    key={key}
+                    style={{
+                      width,
+                      backgroundColor: color,
+                      opacity: 0.7,
+                      transition: "width 0.4s ease",
+                    }}
+                    title={`${key}: ${label} — ${(value * 100).toFixed(1)}%`}
+                  ></div>
+                );
+              })}
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-4">
+              {Object.entries(result.distribution).map(([key, value], index) => {
+                if (typeof value !== "number" || value <= 0) return null;
+
+                const color = COLORS[index % COLORS.length];
+                const label = CATEGORY_LABELS[key] || key;
+
+                return (
+                  <Badge
+                    key={key}
+                    className="px-3 py-1 rounded-lg shadow"
+                    style={{
+                      backgroundColor: color,
+                      color: "white",
+                    }}
+                    title={label}
+                  >
+                    {key}: {(value * 100).toFixed(1)}%
+                  </Badge>
+                );
+              })}
+            </div>
+          </TooltipProvider>
+        </div>
+      )}
+
+      <div className="p-4 bg-muted/50 rounded-lg border border-border">
+        <p className="text-sm text-muted-foreground">
+          <strong>Model Used:</strong> {model.toUpperCase()} |{" "}
+          <strong>Language:</strong> {language.charAt(0).toUpperCase() + language.slice(1)}
+        </p>
+      </div>
+    </div>
+  </Card>
+)}
         </div>
       </main>
     </div>
