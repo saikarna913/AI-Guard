@@ -86,8 +86,8 @@ const COLORS = [
 const Index = () => {
   const { toast } = useToast();
   const [text, setText] = useState<string>("");
-  const [model, setModel] = useState<string>("gpt");
-  const [language, setLanguage] = useState<string>("english");
+  const [model, setModel] = useState<string>("Qwen2.5-1.5B-Instruct");
+  const [language, setLanguage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<Result | null>(null);
 
@@ -149,8 +149,8 @@ const Index = () => {
                     <SelectValue placeholder="Choose a model" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="meta-llama/Llama-3.2-1B-Instruct">
-                      Llama-3.2-1B
+                    <SelectItem value="Qwen2.5-1.5B-Instruct">
+                      Qwen2.5-1.5B-Instruct
                     </SelectItem>
                   </SelectContent>
                 </Select>

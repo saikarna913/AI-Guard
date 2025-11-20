@@ -119,33 +119,33 @@ const profanityDistData = [
 
 // Safety categories data from your SQL results
 const safetyCategoriesData = [
-  { category: "S1", count: 122867, percentage: 88.54, fill: "#ef4444" },
-  { category: "S2", count: 35304, percentage: 25.44, fill: "#dc2626" },
-  { category: "S3", count: 21804, percentage: 15.71, fill: "#f59e0b" },
-  { category: "S4", count: 8156, percentage: 5.88, fill: "#eab308" },
-  { category: "S5", count: 2124, percentage: 1.53, fill: "#84cc16" },
-  { category: "S6", count: 31000, percentage: 22.34, fill: "#10b981" },
-  { category: "S7", count: 13808, percentage: 9.95, fill: "#0ea5e9" },
-  { category: "S8", count: 1296, percentage: 0.93, fill: "#3b82f6" },
-  { category: "S9", count: 328, percentage: 0.24, fill: "#8b5cf6" },
-  { category: "S10", count: 55551, percentage: 40.03, fill: "#a855f7" },
-  { category: "S11", count: 1760, percentage: 1.27, fill: "#d946ef" },
-  { category: "S12", count: 13261, percentage: 9.56, fill: "#ec4899" },
-  { category: "S13", count: 3531, percentage: 2.54, fill: "#f97316" },
-  { category: "S14", count: 6980, percentage: 5.03, fill: "#64748b" },
-  { category: "S15", count: 3796, percentage: 2.74, fill: "#6b7280" },
-  { category: "S16", count: 2432, percentage: 1.75, fill: "#374151" },
-  { category: "S17", count: 27081, percentage: 19.51, fill: "#1f2937" }
+  { category: "S1", count: 41880, percentage: 34.94, fill: "#ef4444" },
+  { category: "S2", count: 18464, percentage: 15.41, fill: "#dc2626" },
+  { category: "S3", count: 8548, percentage: 7.13, fill: "#f59e0b" },
+  { category: "S4", count: 2632, percentage: 2.20, fill: "#eab308" },
+  { category: "S5", count: 580, percentage: 0.48, fill: "#84cc16" },
+  { category: "S6", count: 7780, percentage: 6.49, fill: "#10b981" },
+  { category: "S7", count: 0, percentage: 0.00, fill: "#0ea5e9" }, // S7 not in new data
+  { category: "S8", count: 528, percentage: 0.44, fill: "#3b82f6" },
+  { category: "S9", count: 40, percentage: 0.03, fill: "#8b5cf6" },
+  { category: "S10", count: 32844, percentage: 27.40, fill: "#a855f7" },
+  { category: "S11", count: 596, percentage: 0.50, fill: "#d946ef" },
+  { category: "S12", count: 1208, percentage: 1.01, fill: "#ec4899" },
+  { category: "S13", count: 308, percentage: 0.26, fill: "#f97316" },
+  { category: "S14", count: 1228, percentage: 1.02, fill: "#64748b" },
+  { category: "S15", count: 36, percentage: 0.03, fill: "#6b7280" },
+  { category: "S16", count: 40, percentage: 0.03, fill: "#374151" },
+  { category: "S17", count: 3148, percentage: 2.63, fill: "#1f2937" }
 ];
 
 // Top categories for the pie chart (showing top 6 + others)
 const topCategoriesData = [
-  { category: "S1 (88.54%)", count: 122867, percentage: 88.54, fill: "#ef4444" },
-  { category: "S10 (40.03%)", count: 55551, percentage: 40.03, fill: "#a855f7" },
-  { category: "S2 (25.44%)", count: 35304, percentage: 25.44, fill: "#dc2626" },
-  { category: "S6 (22.34%)", count: 31000, percentage: 22.34, fill: "#10b981" },
-  { category: "S17 (19.51%)", count: 27081, percentage: 19.51, fill: "#1f2937" },
-  { category: "S3 (15.71%)", count: 21804, percentage: 15.71, fill: "#f59e0b" },
+  { category: "S1 (34.94%)", count: 41880, percentage: 34.94, fill: "#ef4444" },
+  { category: "S10 (27.40%)", count: 32844, percentage: 27.40, fill: "#a855f7" },
+  { category: "S2 (15.41%)", count: 18464, percentage: 15.41, fill: "#dc2626" },
+  { category: "S6 (6.49%)", count: 7780, percentage: 6.49, fill: "#10b981" },
+  { category: "S17 (2.63%)", count: 3148, percentage:2.63, fill: "#1f2937" },
+  { category: "S3 (7.13%)", count: 8548, percentage: 7.13, fill: "#f59e0b" },
   { 
     category: "Others", 
     count: safetyCategoriesData

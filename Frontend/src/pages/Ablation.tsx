@@ -119,14 +119,24 @@ const Ablation = () => {
     </TableRow>
 
     <TableRow>
-      <TableCell>SFT LoRA (Binary head, 14k)</TableCell>
+      <TableCell>Llama-3.2-1B SFT LoRA (Binary head, 14k)</TableCell>
       <TableCell>3300</TableCell>
       <TableCell>0.5912</TableCell>
       <TableCell>0.4559</TableCell>
       <TableCell>0.6959</TableCell>
       <TableCell>0.7272</TableCell>
     </TableRow>
+          <TableRow>
+      <TableCell>Qwen-3-1.5B-Instruct SFT LoRA (Binary head, 270k)</TableCell>
+      <TableCell>27000</TableCell>
+      <TableCell>0.9560</TableCell>
+      <TableCell>0.94</TableCell>
+      <TableCell>0.96</TableCell>
+      <TableCell>—</TableCell>
+    </TableRow>
   </TableBody>
+
+  
 
   <TableCaption>Binary safety classification evaluation.</TableCaption>
 </Table>
@@ -154,10 +164,11 @@ const Ablation = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Model</TableHead>
-                  <TableHead>Classes</TableHead>
-                  <TableHead>Accuracy</TableHead>
-                  <TableHead>Macro F1</TableHead>
-                  <TableHead>Latency (s)</TableHead>
+                  <TableHead>KL divergence</TableHead>
+                  <TableHead>Jaccard Similarity</TableHead>
+                  <TableHead>Exact Match</TableHead>
+                  <TableHead>Top-1 Recall</TableHead>
+                  <TableHead>Top-3 Recall</TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -165,6 +176,7 @@ const Ablation = () => {
                 <TableRow>
                   <TableCell>Zero-shot Llama-3.2-1B</TableCell>
                   <TableCell>—</TableCell>
+      <TableCell>—</TableCell>
       <TableCell>—</TableCell>
       <TableCell>—</TableCell>
       <TableCell>—</TableCell>
@@ -176,14 +188,24 @@ const Ablation = () => {
       <TableCell>—</TableCell>
       <TableCell>—</TableCell>
       <TableCell>—</TableCell>
+            <TableCell>—</TableCell>
                 </TableRow>
 
                 <TableRow>
-                  <TableCell>SFT LoRA (Multiclass head)</TableCell>
+                  <TableCell>Llama-3.2-1B SFT LoRA </TableCell>
                   <TableCell>—</TableCell>
       <TableCell>—</TableCell>
       <TableCell>—</TableCell>
       <TableCell>—</TableCell>
+            <TableCell>—</TableCell>
+                </TableRow>
+                 <TableRow>
+                  <TableCell>Qwen-3-1.5B-Instruct SFT LoRA </TableCell>
+                  <TableCell>4.7587</TableCell>
+      <TableCell>0.8150</TableCell>
+      <TableCell>13%</TableCell>
+      <TableCell>32.08%</TableCell>
+            <TableCell>68.25%</TableCell>
                 </TableRow>
               </TableBody>
 

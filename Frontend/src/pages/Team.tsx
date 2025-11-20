@@ -22,7 +22,7 @@ const Team = () => {
       college: "Indian Institute of Technology Gandhinagar",
       year: "Student",
       course: "Computer Science & Engineering",
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bhakti",
+      image: "./bhakti.jpg",
       socials: {
         linkedin: "https://www.linkedin.com/in/bhakti-prasad-swain-5026372a7/",
         github: "...",
@@ -46,7 +46,7 @@ const Team = () => {
       college: "Indian Institute of Technology Gandhinagar",
       year: "Student",
       course: "Computer Science & Engineering",
-      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pranjal",
+      image: "./pranjal.jpg",
       socials: {
         linkedin: "https://www.linkedin.com/in/pranjal-goyal-339312320/",
         github: "https://github.com/....",
