@@ -128,7 +128,7 @@ const Index = () => {
               <Shield className="w-16 h-16 text-primary" aria-label="Shield Icon" />
             </div>
             <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              AI-Guard(Text Analyzer)
+             IndicGuard
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Analyze any text for content safety and categorization using our fine tuned State-of-the-art AI model.{" "}

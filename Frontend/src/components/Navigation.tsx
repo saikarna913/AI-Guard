@@ -16,7 +16,7 @@ const Navigation = () => {
             className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors"
           >
             <Shield className="w-6 h-6 text-primary" />
-            <span>SafeText AI</span>
+            <span>IndicGuard</span>
           </NavLink>
 
           <div className="flex items-center gap-6">

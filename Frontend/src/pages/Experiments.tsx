@@ -364,16 +364,7 @@ const Experiments = () => {
 
 
 
-          <Card className="p-6">
-  <h2 className="text-2xl font-semibold mb-4">Key Findings</h2>
-  <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-    <li>Multi-classifier head achieved <strong>95.60% overall success rate</strong> across all languages with consistent performance.</li>
-    <li>SFT LoRA with binary classification showed <strong>best accuracy (59.12%)</strong> and <strong>highest UNSAFE F1 score (69.59%)</strong>.</li>
-    <li>Fine-tuned models significantly improved UNSAFE detection while maintaining reasonable latency (~0.73s).</li>
-    <li>Multi-classifier demonstrated excellent performance across diverse languages (Bengali: 98.26%, Kannada: 97.64% success rates).</li>
-    <li>Few-shot approaches showed moderate performance but with higher latency, especially on larger models.</li>
-  </ul>
-</Card>
+<Card className="p-6"> <h2 className="text-2xl font-semibold mb-4">Key Findings</h2> <ul className="list-disc pl-5 space-y-2 text-muted-foreground"> <li>Binary classification model achieved <strong>95.60% overall accuracy</strong> with excellent performance metrics.</li> <li>Strong UNSAFE detection capability: <strong>96.80% precision</strong> and <strong>95.91% recall</strong> for unsafe content identification.</li> <li>Excellent model agreement demonstrated by <strong>Cohen's Kappa: 0.908</strong> and <strong>MCC: 0.9081</strong>.</li> <li>High distribution similarity with <strong>Jaccard Similarity of 0.815</strong>, though significant output divergence indicated by <strong>KL Divergence of 4.759</strong>.</li> <li>Moderate exact match performance at <strong>13.0%</strong>, but strong retrieval capability with <strong>68.3% top-3 recall</strong>.</li> <li>Robust performance across both classes: <strong>94% F1 for SAFE</strong> and <strong>96% F1 for UNSAFE</strong> with minimal unknown outputs .</li> <li>Fine-tuned models significantly improved unsafe content detection while maintaining consistent performance across diverse inputs.</li> </ul> </Card>
         </div>
       </main>
     </div>
