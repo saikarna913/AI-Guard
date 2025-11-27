@@ -33,7 +33,7 @@ export async function analyzeText(payload: { model: string; language: string; te
   const timeout = setTimeout(() => controller.abort(), 5 * 60 * 1000);
 
   try {
-    const res = await fetch("http://10.7.10.54:5000/infer", {
+    const res = await fetch("http://10.0.62.205:5000/infer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: payload.text }),
